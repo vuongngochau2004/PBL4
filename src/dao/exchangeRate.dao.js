@@ -1,15 +1,14 @@
-const exchangeRateModel = require('../app/models/exchangeRate.model');
-const bankModel = require('./../app/models/bank.model');
-const currencyModel = require('./../app/models/currency.model');
+const { Bank, Currency, ExchangeRate } = require('../app/models/index.model');
+
 const crawlVietcombankData = async (exchangeData) => {
   for(const row of exchangeData){
     const [currencyCode, currencyNameEng, buyCashPriceRaw, buyTransferPriceRaw, sellCashPriceRaw] = row;
-    const vietcomCurrency = await currencyModel.findOne({
+    const vietcomCurrency = await Currency.findOne({
       where: {
         code: currencyCode
       }
     })
-    const vietcomBank = await bankModel.findOne({
+    const vietcomBank = await Bank.findOne({
       where: {
         name: 'Vietcombank'
       }
@@ -22,15 +21,15 @@ const crawlVietcombankData = async (exchangeData) => {
     var buyTransferPrice = parseFloat(cleanedBuyTransferPriceRaw);
     var sellCashPrice = parseFloat(cleanedSellCashPriceRaw);
     
-    if(isNaN(buyCashPrice)){
+    if(isNaN(buyCashPrice) || buyCashPrice === 0){
       buyCashPrice = null;
-    }else if(isNaN(buyTransferPrice)){
+    }else if(isNaN(buyTransferPrice) || buyTransferPrice === 0){
       buyTransferPrice = null;
-    }else if(isNaN(sellCashPrice)){
+    }else if(isNaN(sellCashPrice) || sellCashPrice === 0){
       sellCashPrice = null;
     }
     // Kiểm tra sự tồn tại của bản ghi
-    const existingExchangeRate = await exchangeRateModel.findOne({
+    const existingExchangeRate = await ExchangeRate.findOne({
       where: {
         bank_id: vietcomBank.id,
         currency_id: vietcomCurrency.id
@@ -43,16 +42,18 @@ const crawlVietcombankData = async (exchangeData) => {
         buy_cash_price: buyCashPrice,
         buy_transfer_price: buyTransferPrice,
         sell_cash_price: sellCashPrice,
+        sell_transfer_price: null,
       });
       console.log('Updated successfully!');
     } else {
       // Nếu bản ghi chưa tồn tại, tạo mới
-      const exchangeRate = await exchangeRateModel.create({
+      const exchangeRate = await ExchangeRate.create({
         bank_id: vietcomBank.id,
         currency_id: vietcomCurrency.id,
         buy_cash_price: buyCashPrice,
         buy_transfer_price: buyTransferPrice,
         sell_cash_price: sellCashPrice,
+        sell_transfer_price: null,
       });
       if (exchangeRate != null) {
         console.log('Created successfully!');
@@ -65,7 +66,60 @@ const crawlMBbankData = async (exchangeData) => {
   
 }
 
+const getExchangeRateCurrencyByBankId = async(id) => {
+  return await ExchangeRate.findAll({
+    where: {
+      bank_id: id
+    },
+    include: [{
+      model: Currency,
+      attributes: ['name', 'code'],
+    }],
+  })
+  .then(result => {
+    return result;  // Trả về trực tiếp vì result đã là một mảng các đối tượng thuần
+  })
+  .catch(error => {
+    console.error(error);
+    return [];  // Trả về mảng rỗng nếu có lỗi xảy ra
+  });
+}
+
+const getExchangeRateBankByCurrencyId = async(id) => {
+  return await ExchangeRate.findAll({
+    where: {
+      currency_id: id
+    },
+    include: [{
+      model: Bank,
+      attributes: ['name', 'fullname'],
+    }],
+  })
+  .then(result => {
+    return result;  // Trả về trực tiếp vì result đã là một mảng các đối tượng thuần
+  })
+  .catch(error => {
+    console.error(error);
+    return [];  // Trả về mảng rỗng nếu có lỗi xảy ra
+  });
+}
+
+const getExchangeRateByBankId = async (id) => {
+  return await ExchangeRate.findAll({
+    bank_id: id
+  })
+  .then(result => {
+    return result;  // Trả về trực tiếp vì result đã là một mảng các đối tượng thuần
+  })
+  .catch(error => {
+    console.error(error);
+    return [];  // Trả về mảng rỗng nếu có lỗi xảy ra
+  });
+}
 
 module.exports = {  
   crawlVietcombankData,
+  getExchangeRateByBankId,
+  getExchangeRateCurrencyByBankId,
+  getExchangeRateBankByCurrencyId
 }

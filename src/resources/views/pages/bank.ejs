@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Tỷ giá ngoại tệ</h5>
+      <table class="table table-striped table-hover table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Ngân hàng </th>
+            <th scope="col">Tên đầy đủ</th>
+            <th scope="col">Thời gian cập nhật</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% banks.forEach(function(bank) { %>
+          <tr>
+            <th scope="row"><a href= "/exchange-rate/<%= bank.id %>"><%= bank.name %></a></th>
+            <td><%= bank.fullname %></td>
+            <td><%= bank.last_updated %></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

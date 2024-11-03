@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Tỷ giá <%= currency.code %> tại các ngân hàng </h5>
+      <table class="table table-striped table-hover table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Ngân hàng </th>
+            <th scope="col">Mua tiền mặt</th>
+            <th scope="col">Mua chuyển khoản</th>
+            <th scope="col">Bán tiền mặt</th>
+            <th scope="col">Bán chuyển khoản</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% exchangeRateBanks.forEach(function(item) { %>
+          <tr>
+            <th scope="row"><%= item.bank.name %></th>
+            <td><%= item.buy_cash_price %></td>
+            <td><%= item.buy_transfer_price %></td>
+            <td><%= item.sell_cash_price %></td>
+            <td><%= item.sell_transfer_price %></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

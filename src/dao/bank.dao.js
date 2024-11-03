@@ -1,4 +1,4 @@
-const bankModel = require('../app/models/bank.model');
+const { Bank } = require('../app/models/index.model');
 
 const  crawlBank = async (exchangeData)=> {
   for (const row of exchangeData) {
@@ -11,7 +11,7 @@ const  crawlBank = async (exchangeData)=> {
     if (!createUpdate || createUpdate.includes('...')) {
       console.log(`Invalid date format for bank ${nameBank}, storing null.`);
       // Lưu vào cơ sở dữ liệu với giá trị null nếu ngày không hợp lệ
-      await bankModel.findOrCreate({
+      await Bank.findOrCreate({
         where: { name: nameBank },
         defaults: {
           name: nameBank,
@@ -39,7 +39,7 @@ const  crawlBank = async (exchangeData)=> {
             // console.log(`Formatted date for ${codeNameBank}: `, formattedDate);
             
             // Tiếp tục các thao tác với bankModel sau khi tạo thành công formattedDate
-            const [bank, created] = await bankModel.findOrCreate({
+            const [bank, created] = await Bank.findOrCreate({
               where: { name: nameBank },
               defaults: {
                 name: nameBank,
@@ -63,7 +63,7 @@ const  crawlBank = async (exchangeData)=> {
 }
 
 const getAllBankData = async () => {
-  return await bankModel.findAll({
+  return await Bank.findAll({
     raw: true  // Trả về các đối tượng thuần túy thay vì instance của Sequelize
   })
   .then(result => {
@@ -75,7 +75,18 @@ const getAllBankData = async () => {
   });
 }
 
+const getBankById = async (id) =>{
+  return await Bank.findByPk(id)
+  .then(result => {
+    return result;  // Trả về trực tiếp vì result đã là một mảng các đối tượng thuần
+  })
+  .catch(error => {
+    console.error(error);
+    return [];  // Trả về mảng rỗng nếu có lỗi xảy ra
+  });
+} 
 module.exports = {
   getAllBankData,
   crawlBank,
+  getBankById
 }

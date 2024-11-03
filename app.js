@@ -6,6 +6,7 @@ const router = require('./src/routers/index');
 
 const db = require('./src/configs/database');
 
+var expressLayouts = require("express-ejs-layouts");
 db.connect();
 
 // body parser
@@ -15,7 +16,8 @@ app.use(express.json());
 
 app.set('views', './src/resources/views');
 app.set('view engine', 'ejs');
-
+app.use(expressLayouts);
+app.set("layout", "backend");
 
 // Route init
 router(app);

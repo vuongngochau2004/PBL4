@@ -30,5 +30,6 @@ const bank = sequelize.define('bank', {
   timestamps: true,      // Tự động thêm createdAt và updatedAt
 });
 
+
 module.exports = bank;
 

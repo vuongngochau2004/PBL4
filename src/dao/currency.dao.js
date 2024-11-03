@@ -1,9 +1,11 @@
-const currencyModel = require('../app/models/currency.model');
+const e = require('express');
+const { Currency } = require('../app/models/index.model');
+
 const crawlCurrency = async (exchangeData) => {
   for (const row of exchangeData) {
     if(row.length == 5 ){
       const [ currencyName, currencySymbol, currencyCode, minValue, numberBasic ] = row;
-      await currencyModel.findOrCreate({
+      await Currency.findOrCreate({
         where: { code: currencyCode },
         defaults: {
           code: currencyCode,
@@ -12,7 +14,7 @@ const crawlCurrency = async (exchangeData) => {
       });
     }else{
       const [ country, currencyName, currencySymbol, currencyCode, minValue, numberBasic ] = row;
-      await currencyModel.findOrCreate({
+      await Currency.findOrCreate({
         where: { code: currencyCode },
         defaults: {
           code: currencyCode,
@@ -24,7 +26,7 @@ const crawlCurrency = async (exchangeData) => {
 }
 
 const getAllCurrencyData = async () =>{
-  return await currencyModel.findAll({
+  return await Currency.findAll({
     raw: true  // Trả về các đối tượng thuần túy thay vì instance của Sequelize
   })
   .then(result => {
@@ -36,7 +38,22 @@ const getAllCurrencyData = async () =>{
   });
 } 
 
+const getCurrencyByCode = async (code) => {
+  return await Currency.findOne({
+    where:{
+      code: code
+    }
+  })
+  .then(result => {
+    return result;
+  })
+  .catch(error => {
+    console.log(error);
+  })
+}
+
 module.exports = {  
   crawlCurrency,
-  getAllCurrencyData
+  getAllCurrencyData,
+  getCurrencyByCode
 }
