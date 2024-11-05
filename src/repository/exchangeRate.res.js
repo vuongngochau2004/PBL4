@@ -1,11 +1,11 @@
-const { scrapeSite, scheduleScraping } = require('./../helpers/crawl');
+const { scrapeSite, scheduleScraping, scheduleScrapingExchangeRate } = require('./../helpers/crawl');
 const { crawlVietcombankData,
    getExchangeRateByBankId, 
    getExchangeRateCurrencyByBankId,
    getExchangeRateBankByCurrencyId
    } = require('./../dao/exchangeRate.dao');
 const fetchExchangeRateData = async (sitesConfig) => {
-  const scrapingPromises = sitesConfig.map(site => scheduleScraping(site, (exchangeRate) =>{
+  const scrapingPromises = sitesConfig.map(site => scheduleScrapingExchangeRate(site, (exchangeRate) =>{
     if(site.name == "Vietcombank"){
       crawlVietcombankData(exchangeRate);
     }

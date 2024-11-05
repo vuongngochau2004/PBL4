@@ -20,7 +20,7 @@ const crawlVietcombankData = async (exchangeData) => {
     var buyCashPrice = parseFloat(cleanedBuyCashPrice);
     var buyTransferPrice = parseFloat(cleanedBuyTransferPriceRaw);
     var sellCashPrice = parseFloat(cleanedSellCashPriceRaw);
-    
+
     if(isNaN(buyCashPrice) || buyCashPrice === 0){
       buyCashPrice = null;
     }else if(isNaN(buyTransferPrice) || buyTransferPrice === 0){
@@ -28,36 +28,16 @@ const crawlVietcombankData = async (exchangeData) => {
     }else if(isNaN(sellCashPrice) || sellCashPrice === 0){
       sellCashPrice = null;
     }
-    // Kiểm tra sự tồn tại của bản ghi
-    const existingExchangeRate = await ExchangeRate.findOne({
-      where: {
-        bank_id: vietcomBank.id,
-        currency_id: vietcomCurrency.id
-      }
+    const exchangeRate = await ExchangeRate.create({
+      bank_id: vietcomBank.id,
+      currency_id: vietcomCurrency.id,
+      buy_cash_price: buyCashPrice,
+      buy_transfer_price: buyTransferPrice,
+      sell_cash_price: sellCashPrice,
+      sell_transfer_price: null,
     });
-
-    if (existingExchangeRate) {
-      // Nếu bản ghi đã tồn tại, cập nhật bản ghi
-      await existingExchangeRate.update({
-        buy_cash_price: buyCashPrice,
-        buy_transfer_price: buyTransferPrice,
-        sell_cash_price: sellCashPrice,
-        sell_transfer_price: null,
-      });
-      console.log('Updated successfully!');
-    } else {
-      // Nếu bản ghi chưa tồn tại, tạo mới
-      const exchangeRate = await ExchangeRate.create({
-        bank_id: vietcomBank.id,
-        currency_id: vietcomCurrency.id,
-        buy_cash_price: buyCashPrice,
-        buy_transfer_price: buyTransferPrice,
-        sell_cash_price: sellCashPrice,
-        sell_transfer_price: null,
-      });
-      if (exchangeRate != null) {
-        console.log('Created successfully!');
-      }
+    if (exchangeRate != null) {
+      console.log('Created successfully!');
     }
   }
 }

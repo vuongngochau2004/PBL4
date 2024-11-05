@@ -38,17 +38,26 @@ const  crawlBank = async (exchangeData)=> {
             const formattedDate = new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}+07:00`);
             // console.log(`Formatted date for ${codeNameBank}: `, formattedDate);
             
-            // Tiếp tục các thao tác với bankModel sau khi tạo thành công formattedDate
-            const [bank, created] = await Bank.findOrCreate({
+            const existingBank = await Bank.findOne({
               where: { name: nameBank },
-              defaults: {
-                name: nameBank,
-                fullname: fullnameBank,
-                last_updated: formattedDate, // Lưu thời gian đã chuyển đổi vào updatedAt
-              },
             });
-            
-            // console.log('bank :: ', bank);
+            // Tiếp tục các thao tác với bankModel sau khi tạo thành công formattedDate
+            if(existingBank){
+              // Nếu bản ghi đã tồn tại, cập nhật bản ghi
+              await existingBank.update({
+                last_updated: formattedDate,
+              });
+              console.log('Updated successfully!');
+            }else{
+              const [bank, created] = await Bank.findOrCreate({
+                where: { name: nameBank },
+                defaults: {
+                  name: nameBank,
+                  fullname: fullnameBank,
+                  last_updated: formattedDate, // Lưu thời gian đã chuyển đổi vào updatedAt
+                },
+              });
+            }
           } else {
             console.error(`Invalid date or time format for bank ${nameBank}`);
           }
