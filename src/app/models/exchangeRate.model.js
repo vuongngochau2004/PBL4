@@ -24,19 +24,19 @@ const exchangeRate = sequelize.define('exchangeRate', {
     },
   },
   buy_cash_price: {
-    type: DataTypes.FLOAT,
+    type:  DataTypes.DECIMAL(10, 2), 
     allowNull: true,
   },
   buy_transfer_price: {
-    type: DataTypes.FLOAT,
+    type: DataTypes.DECIMAL(10, 2),
     allowNull: true,
   },
   sell_cash_price: {
-    type: DataTypes.FLOAT,
+    type:  DataTypes.DECIMAL(10, 2),
     allowNull: true,
   },
   sell_transfer_price: {
-    type: DataTypes.FLOAT,
+    type: DataTypes.DECIMAL(10, 2),
     allowNull: true,
   },
   creation_date: {

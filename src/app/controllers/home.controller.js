@@ -84,6 +84,12 @@ module.exports = {
         rowSelector: '.hidden #content .table-pin-rows tbody tr',
         columnSelector: 'td'
       },
+      {
+        name: 'Agribank',
+        url: 'https://www.agribank.com.vn/vn/ty-gia',
+        rowSelector: '#tyGiaCn table tbody tr',
+        columnSelector: 'td'
+      }
     ];
     fetchBankData(siteBankConfig)
     .catch(console.error);
@@ -91,6 +97,5 @@ module.exports = {
     .catch(console.error);
     fetchExchangeRateData(sitesConfig)
     .catch(console.error);
-
   }
 }

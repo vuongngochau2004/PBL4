@@ -17,19 +17,21 @@ const crawlVietcombankData = async (exchangeData) => {
         name: 'Vietcombank'
       }
     })
-    const cleanedBuyCashPrice = buyCashPriceRaw.includes(',') ? buyCashPriceRaw.replace(/,/g, '.') : '0,' + buyCashPriceRaw;
-    const cleanedBuyTransferPriceRaw = buyTransferPriceRaw.includes(',') ? buyTransferPriceRaw.replace(/,/g, '.') : '0.' + buyTransferPriceRaw;
-    const cleanedSellCashPriceRaw = sellCashPriceRaw.includes(',') ? sellCashPriceRaw.replace(/,/g, '.') : '0.' + sellCashPriceRaw;
+    const cleanedBuyCashPrice = buyCashPriceRaw.includes(',') ? buyCashPriceRaw.replace(/,/g, '') :  buyCashPriceRaw;
+    const cleanedBuyTransferPriceRaw = buyTransferPriceRaw.includes(',') ? buyTransferPriceRaw.replace(/,/g, '') : buyTransferPriceRaw;
+    const cleanedSellCashPriceRaw = sellCashPriceRaw.includes(',') ? sellCashPriceRaw.replace(/,/g, '') :  sellCashPriceRaw;
 
     var buyCashPrice = parseFloat(cleanedBuyCashPrice);
     var buyTransferPrice = parseFloat(cleanedBuyTransferPriceRaw);
     var sellCashPrice = parseFloat(cleanedSellCashPriceRaw);
-    
+    console.log(sellCashPrice);
     if(isNaN(buyCashPrice)){
       buyCashPrice = null;
-    }else if(isNaN(buyTransferPrice)){
+    }
+     if(isNaN(buyTransferPrice)){
       buyTransferPrice = null;
-    }else if(isNaN(sellCashPrice)){
+    }
+     if(isNaN(sellCashPrice)){
       sellCashPrice = null;
     }
     // Kiểm tra sự tồn tại của bản ghi
@@ -84,24 +86,27 @@ const crawlMBbankData = async (exchangeData) => {
       }
     });
     // xử lí dữ liệu 
-    const cleanedBuyCashPrice = buyCashPriceRaw.includes(',') ? buyCashPriceRaw.replace(/,/g, '') : buyCashPriceRaw;
+    const cleanedBuyCashPrice = buyCashPriceRaw.includes(',') ? buyCashPriceRaw.replace(/\,/g, "") : buyCashPriceRaw;
     const cleanedBuyTransferPriceRaw = buyTransferPriceRaw.includes(',') ? buyTransferPriceRaw.replace(/,/g, '') : buyTransferPriceRaw;
     const cleanedSellTransferPriceRaw = sellTransferPriceRaw.includes(',') ? sellTransferPriceRaw.replace(/,/g, '') : sellTransferPriceRaw;
     const cleanedSellCashPriceRaw = sellCashPriceRaw.includes(',') ? sellCashPriceRaw.replace(/,/g, '') : sellCashPriceRaw;
-    console.log(cleanedBuyCashPrice + '\n');
+    // console.log(cleanedBuyCashPrice + '\n');
     var buyCashPrice = parseFloat(cleanedBuyCashPrice);
     var buyTransferPrice = parseFloat(cleanedBuyTransferPriceRaw);
     var sellCashPrice = parseFloat(cleanedSellCashPriceRaw);
     var sellTransferPrice = parseFloat(cleanedSellTransferPriceRaw);
-    console.log(buyCashPrice);
+
     
-    if(isNaN(buyCashPrice)){
+    if(isNaN(buyCashPriceRaw)){
       buyCashPrice = null;
-    } else if(isNaN(buyTransferPrice)){
+    } 
+     if(isNaN(buyTransferPriceRaw)){
       buyTransferPrice = null;
-    } else if(isNaN(sellCashPrice)) {
+    } 
+     if(isNaN(sellCashPriceRaw)) {
       sellCashPrice = null;
-    } else if(isNaN(sellTransferPrice)){
+    } 
+     if(isNaN(sellTransferPriceRaw)){
       sellTransferPrice = null;
     }
     // const existingExchangeRate = await exchangeRateModel.findOne({
@@ -123,9 +128,15 @@ const crawlMBbankData = async (exchangeData) => {
         buy_transfer_price : buyTransferPrice,
         sell_cash_price: sellCashPrice,
         sell_transfer_price : sellTransferPrice
-      });
+      },
+      {
+        where: {
+          bank_id: mbBank.id,
+          currency_id: mbCurrency.id
+        }
+      }
+    );
       console.log('Updated mbbank successfully!');
-
     }
     else {
       const exchangeRate = exchangeRateModel.create({
@@ -142,7 +153,77 @@ const crawlMBbankData = async (exchangeData) => {
     }
   }
 }
+const crawlVietinbankData = async (exchangeData) =>{
+  // for(const row of exchangeData){
+  //   console.log(row);
+  // }
+}
+const crawlAgribankData = async (exchangeData) =>{
+  for(const row of exchangeData){
+    const [currencyCode, buyCashPriceRaw, buyTransferPriceRaw, sellCashPriceRaw] = row;
+    const agribankCurrency = await currencyModel.findOne({ 
+      where: {
+        code: currencyCode
+      }
+    })
+    const agribankBank = await bankModel.findOne({
+      where: {
+        name: 'Agribank'
+      }
+    })
+    const cleanedBuyCashPrice = buyCashPriceRaw.includes(',') ? buyCashPriceRaw.replace(/,/g, '') :  buyCashPriceRaw;
+    const cleanedBuyTransferPriceRaw = buyTransferPriceRaw.includes(',') ? buyTransferPriceRaw.replace(/,/g, '') : buyTransferPriceRaw;
+    const cleanedSellCashPriceRaw = sellCashPriceRaw.includes(',') ? sellCashPriceRaw.replace(/,/g, '') :  sellCashPriceRaw;
+
+    var buyCashPrice = parseFloat(cleanedBuyCashPrice);
+    var buyTransferPrice = parseFloat(cleanedBuyTransferPriceRaw);
+    var sellCashPrice = parseFloat(cleanedSellCashPriceRaw);
+    console.log(sellCashPrice);
+    if(isNaN(buyCashPrice)){
+      buyCashPrice = null;
+    }
+     if(isNaN(buyTransferPrice)){
+      buyTransferPrice = null;
+    }
+     if(isNaN(sellCashPrice)){
+      sellCashPrice = null;
+    }
+    // Kiểm tra sự tồn tại của bản ghi
+    const existingExchangeRate = await exchangeRateModel.findOne({
+      where: {
+        bank_id: agribankBank.id,
+        currency_id: agribankCurrency.id
+      }
+    });
+
+    if (existingExchangeRate) {
+      // Nếu bản ghi đã tồn tại, cập nhật bản ghi
+      await existingExchangeRate.update({
+        buy_cash_price: buyCashPrice,
+        buy_transfer_price: buyTransferPrice,
+        sell_cash_price: sellCashPrice,
+      }
+    );
+      console.log('Updated successfully!');
+    } else {
+      // Nếu bản ghi chưa tồn tại, tạo mới
+      const exchangeRate = await exchangeRateModel.create({
+        bank_id: agribankBank.id,
+        currency_id: agribankCurrency.id,
+        buy_cash_price: buyCashPrice,
+        buy_transfer_price: buyTransferPrice,
+        sell_cash_price: sellCashPrice,
+      });
+      if (exchangeRate != null) {
+        console.log('Created successfully!');
+      }
+    }
+    
+  }
+}
 module.exports = {  
   crawlVietcombankData,
-  crawlMBbankData
+  crawlMBbankData,
+  crawlVietinbankData,
+  crawlAgribankData
 }
