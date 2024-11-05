@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 
  // Khởi tạo kết nối với MySQL sử dụng connection pool
- const sequelize = new Sequelize('crawl', 'root', 'bourbon', {
+ const sequelize = new Sequelize('crawl', 'root', '', {
   host: 'localhost', // hoặc địa chỉ máy chủ của MySQL
   dialect: 'mysql',  // Chọn loại cơ sở dữ liệu
   pool: {
