@@ -3,6 +3,7 @@ const exchangeRateModel = require('../app/models/exchangeRate.model');
 const bankModel = require('./../app/models/bank.model');
 const currencyModel = require('./../app/models/currency.model');
 const currency = require('./../app/models/currency.model');
+const exchangeRate = require('../app/models/exchangeRate.model');
 const crawlVietcombankData = async (exchangeData) => {
   for(const row of exchangeData){
     
@@ -73,6 +74,7 @@ const crawlMBbankData = async (exchangeData) => {
     if(currencyCode == 'USD (USD 50-100)' || currencyCode == 'USD (Dưới 5 USD)' || currencyCode == 'USD (USD 5 - 20)'){
       continue;
     }
+    
     // tim trong bang bank va currency 
     // tra ve doi tuong co currencyCode trong bang bank
     const mbCurrency = await currencyModel.findOne({
@@ -158,7 +160,7 @@ const crawlVietinbankData = async (exchangeData) =>{
   //   console.log(row);
   // }
 }
-const crawlAgribankData = async (exchangeData) =>{
+const  crawlAgribankData = async (exchangeData) =>{
   for(const row of exchangeData){
     const [currencyCode, buyCashPriceRaw, buyTransferPriceRaw, sellCashPriceRaw] = row;
     const agribankCurrency = await currencyModel.findOne({ 
@@ -221,9 +223,78 @@ const crawlAgribankData = async (exchangeData) =>{
     
   }
 }
+const crawlBIDVData = async (exchangeData) =>{
+  for(const row of exchangeData){
+    
+    
+    const [currencyCode, currencyNameEng, buyCashPriceRaw, buyTransferPriceRaw, sellCashPriceRaw] = row;
+    // them doan xu li usd
+    
+    if(currencyCode == "XAU"){
+      continue;
+    }
+    const bidvCurrency = await currencyModel.findOne({ 
+      where: {
+        code: currencyCode
+      }
+    })
+    const bidvBank = await bankModel.findOne({
+      where: {
+        name: 'BIDV'
+      }
+    })
+    const cleanedBuyCashPrice = buyCashPriceRaw.includes(',') ? buyCashPriceRaw.replace(/,/g, '') :  buyCashPriceRaw;
+    const cleanedBuyTransferPriceRaw = buyTransferPriceRaw.includes(',') ? buyTransferPriceRaw.replace(/,/g, '') : buyTransferPriceRaw;
+    const cleanedSellCashPriceRaw = sellCashPriceRaw.includes(',') ? sellCashPriceRaw.replace(/,/g, '') :  sellCashPriceRaw;
+
+    var buyCashPrice = parseFloat(cleanedBuyCashPrice);
+    var buyTransferPrice = parseFloat(cleanedBuyTransferPriceRaw);
+    var sellCashPrice = parseFloat(cleanedSellCashPriceRaw);
+    console.log(sellCashPrice);
+    if(isNaN(buyCashPrice)){
+      buyCashPrice = null;
+    }
+     if(isNaN(buyTransferPrice)){
+      buyTransferPrice = null;
+    }
+     if(isNaN(sellCashPrice)){
+      sellCashPrice = null;
+    }
+    // Kiểm tra sự tồn tại của bản ghi
+    const existingExchangeRate = await exchangeRateModel.findOne({
+      where: {
+        bank_id: bidvBank.id,
+        currency_id: bidvCurrency.id
+      }
+    });
+
+    if (existingExchangeRate) {
+      // Nếu bản ghi đã tồn tại, cập nhật bản ghi
+      await existingExchangeRate.update({
+        buy_cash_price: buyCashPrice,
+        buy_transfer_price: buyTransferPrice,
+        sell_cash_price: sellCashPrice,
+      });
+      console.log('Updated successfully!');
+    } else {
+      // Nếu bản ghi chưa tồn tại, tạo mới
+      const exchangeRate = await exchangeRateModel.create({
+        bank_id: bidvBank.id,
+        currency_id: bidvCurrency.id,
+        buy_cash_price: buyCashPrice,
+        buy_transfer_price: buyTransferPrice,
+        sell_cash_price: sellCashPrice,
+      });
+      if (exchangeRate != null) {
+        console.log('Created successfully!');
+      }
+    }
+  }
+}
 module.exports = {  
   crawlVietcombankData,
   crawlMBbankData,
   crawlVietinbankData,
-  crawlAgribankData
+  crawlAgribankData,
+  crawlBIDVData
 }

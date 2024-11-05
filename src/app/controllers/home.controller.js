@@ -89,6 +89,12 @@ module.exports = {
         url: 'https://www.agribank.com.vn/vn/ty-gia',
         rowSelector: '#tyGiaCn table tbody tr',
         columnSelector: 'td'
+      },
+      {
+        name: 'BIDV',
+        url: 'https://bidv.com.vn/vn/ty-gia-ngoai-te',
+        rowSelector: '.table-reponsive  tbody tr',
+        columnSelector: 'td'
       }
     ];
     fetchBankData(siteBankConfig)

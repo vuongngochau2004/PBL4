@@ -1,5 +1,5 @@
 const { scrapeSite } = require('./../helpers/crawl');
-const {  crawlMBbankData, crawlVietcombankData, crawlVietinbankData, crawlAgribankData } = require('./../dao/exchangeRate.dao');
+const {  crawlMBbankData, crawlVietcombankData, crawlVietinbankData, crawlAgribankData, crawlBIDVData } = require('./../dao/exchangeRate.dao');
 const fetchExchangeRateData = async (sitesConfig) => {
   const scrapingPromises = sitesConfig.map(site => scrapeSite(site, (exchangeRate) =>{
     // if(site.name == "Vietcombank"){
@@ -14,6 +14,10 @@ const fetchExchangeRateData = async (sitesConfig) => {
     if(site.name == "Agribank"){
       crawlAgribankData(exchangeRate);
     }
+    if(site.name == "BIDV"){
+      crawlBIDVData(exchangeRate);
+    }
+
   }));
   return await Promise.all(scrapingPromises);
 };
