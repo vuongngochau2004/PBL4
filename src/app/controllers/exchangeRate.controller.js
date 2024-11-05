@@ -1,5 +1,5 @@
 const { fetchBankData, findAllBank, findBankById } = require('../../repository/bank.res');
-const { fetchCurrencyData, findAllCurrency } = require('../../repository/currency.res');
+const { fetchCurrencyData, findAllCurrency, addCurrency } = require('../../repository/currency.res');
 const { fetchExchangeRateData, findExchangeRateCurrencyByBankId } = require('../../repository/exchangeRate.res');
 
 module.exports = {
@@ -27,15 +27,6 @@ module.exports = {
     })
   },
   createData: () => {
-    const siteCurrencyConfig = [
-      {
-        name: 'Webgia',
-        code_name: 'wg',
-        url: "https://vi.wikipedia.org/wiki/Danh_s%C3%A1ch_lo%E1%BA%A1i_ti%E1%BB%81n_t%E1%BB%87_%C4%91ang_l%C6%B0u_h%C3%A0nh",
-        rowSelector: '.wikitable tbody tr',
-        columnSelector: 'td'
-      }
-    ]
     const siteBankConfig = [
       {
         name: 'Ngan hang',
@@ -67,11 +58,56 @@ module.exports = {
         rowSelector: '.hidden #content .table-pin-rows tbody tr',
         columnSelector: 'td'
       },
+      {
+        name: 'Agribank',
+        url: 'https://www.agribank.com.vn/vn/ty-gia',
+        rowSelector: '#tyGiaCn table tbody tr',
+        columnSelector: 'td'
+      },
+      {
+        name: 'BIDV',
+        url: 'https://bidv.com.vn/vn/ty-gia-ngoai-te',
+        rowSelector: '.table-reponsive  tbody tr',
+        columnSelector: 'td'
+      }
     ];
-    fetchBankData(siteBankConfig)
-    .catch(console.error);
-    fetchCurrencyData(siteCurrencyConfig)
-    .catch(console.error);
+
+    const currencies = [
+      { code: 'USD', name: 'Đô la Mỹ' },
+      { code: 'EUR', name: 'Euro' },
+      { code: 'JPY', name: 'Yên Nhật' },
+      { code: 'GBP', name: 'Bảng Anh' },
+      { code: 'CHF', name: 'Franc Thụy Sĩ' },
+      { code: 'CAD', name: 'Đô la Canada' },
+      { code: 'AUD', name: 'Đô la Úc' },
+      { code: 'NZD', name: 'Đô la New Zealand' },
+      { code: 'HKD', name: 'Đô la Hồng Kông' },
+      { code: 'CNY', name: 'Nhân dân tệ' },
+      { code: 'SGD', name: 'Đô la Singapore' },
+      { code: 'TWD', name: 'Đài Loan Đôla' },
+      { code: 'NOK', name: 'Krone Na Uy' },
+      { code: 'SEK', name: 'Krona Thụy Điển' },
+      { code: 'DKK', name: 'Krone Đan Mạch' },
+      { code: 'INR', name: 'Rupee Ấn Độ' },
+      { code: 'ZAR', name: 'Rand Nam Phi' },
+      { code: 'MYR', name: 'Ringgit Malaysia' },
+      { code: 'PHP', name: 'Peso Philippines' },
+      { code: 'THB', name: 'Bạt Thái Lan' },
+      { code: 'HUF', name: 'Phôrin Hungary' },
+      { code: 'IDR', name: 'Rupiah Indonesia' },
+      { code: 'KHR', name: 'Riel Campuchia' },
+      { code: 'KRW', name: 'Won Hàn Quốc' },
+      { code: 'KWD', name: 'Dinar Kuwait' },
+      { code: 'LAK', name: 'Kíp Lào' },
+      { code: 'PLN', name: 'Zloty Ba Lan' },
+      { code: 'RUB', name: 'Rúp Nga' },
+      { code: 'CZK', name: 'Crone CH' },
+      { code: 'SAR', name: 'Riyal Ả Rập Xê-út' }
+    ];
+    // fetchBankData(siteBankConfig)
+    // .catch(console.error);
+    // addCurrency(currencies)
+    // .catch(console.error);
     fetchExchangeRateData(sitesConfig)
     .catch(console.error);
   }
