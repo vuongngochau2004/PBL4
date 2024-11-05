@@ -1,5 +1,17 @@
-const e = require('express');
 const { Currency } = require('../app/models/index.model');
+
+const createCurrency = async (currencies) => {
+  console.log("ok");
+  currencies.forEach(async (currency) => {
+    await Currency.findOrCreate({
+      where: { code: currency.code },
+      defaults: {
+        code: currency.code,
+        name: currency.name,
+      },
+    })
+  });
+}
 
 const crawlCurrency = async (exchangeData) => {
   for (const row of exchangeData) {
@@ -38,6 +50,8 @@ const getAllCurrencyData = async () =>{
   });
 } 
 
+
+
 const getCurrencyByCode = async (code) => {
   return await Currency.findOne({
     where:{
@@ -55,5 +69,6 @@ const getCurrencyByCode = async (code) => {
 module.exports = {  
   crawlCurrency,
   getAllCurrencyData,
-  getCurrencyByCode
+  getCurrencyByCode,
+  createCurrency
 }

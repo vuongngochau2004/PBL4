@@ -21,34 +21,31 @@ const  crawlBank = async (exchangeData)=> {
       });
       continue;  // Bỏ qua hàng này
     }
-  
-    // Kiểm tra nếu createUpdate tồn tại và là một chuỗi hợp lệ
+
     if (createUpdate && typeof createUpdate === 'string' && createUpdate.includes(' ')) {
       try {
-        // Tách chuỗi thành giờ và ngày
         const [time, date] = createUpdate.split(' ');
-  
+
         if (date && time) {
           const [day, month, year] = date.split('/');
           const [hours, minutes, seconds] = time.split(':');
-  
+
           // Kiểm tra từng phần tử để đảm bảo không bị undefined
           if (day && month && year && hours && minutes && seconds) {
-            // Tạo đối tượng Date từ chuỗi đã tách
-            const formattedDate = new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}+07:00`);
-            // console.log(`Formatted date for ${codeNameBank}: `, formattedDate);
-            
+            // Tạo đối tượng Date ở UTC
+            const formattedDate = new Date(Date.UTC(year, month - 1, day, hours, minutes, seconds));
+
             const existingBank = await Bank.findOne({
               where: { name: nameBank },
             });
             // Tiếp tục các thao tác với bankModel sau khi tạo thành công formattedDate
-            if(existingBank){
+            if (existingBank) {
               // Nếu bản ghi đã tồn tại, cập nhật bản ghi
               await existingBank.update({
                 last_updated: formattedDate,
               });
               console.log('Updated successfully!');
-            }else{
+            } else {
               const [bank, created] = await Bank.findOrCreate({
                 where: { name: nameBank },
                 defaults: {
