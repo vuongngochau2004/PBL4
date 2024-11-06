@@ -12,7 +12,6 @@ const scrapeSite = async (site, crawlModel) => {
 
   try {
     await page.goto(site.url, { waitUntil: 'networkidle0', timeout: 60000 });
-
     // Generalized data extraction logic
     const exchangeData = await page.evaluate((rowSelector, columnSelector) => {
       const rows = Array.from(document.querySelectorAll(rowSelector));

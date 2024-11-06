@@ -37,13 +37,13 @@ module.exports = {
       },
     ];
     const sitesConfig = [
-      // {
-      //   name: 'Vietcombank',
-      //   code_name: 'VCB',
-      //   url: 'https://www.vietcombank.com.vn/vi-VN/KHCN/Cong-cu-Tien-ich/Ty-gia',
-      //   rowSelector: 'table tbody tr',
-      //   columnSelector: 'td'
-      // },
+      {
+        name: 'Vietcombank',
+        code_name: 'VCB',
+        url: 'https://www.vietcombank.com.vn/vi-VN/KHCN/Cong-cu-Tien-ich/Ty-gia',
+        rowSelector: 'table tbody tr',
+        columnSelector: 'td'
+      },
       {
         name: 'MB Bank',
         code_name: 'MB',
@@ -51,23 +51,23 @@ module.exports = {
         rowSelector: 'table tbody tr',
         columnSelector: 'td'
       },
-      // {
-      //   name: 'Vietinbank',
-      //   code_name: 'VTB',
-      //   url: 'https://www.vietinbank.vn/ca-nhan/ty-gia-khcn',
-      //   rowSelector: '.hidden #content .table-pin-rows tbody tr',
-      //   columnSelector: 'td'
-      // },
-      // {
-      //   name: 'Agribank',
-      //   url: 'https://www.agribank.com.vn/vn/ty-gia',
-      //   rowSelector: '#tyGiaCn table tbody tr',
-      //   columnSelector: 'td'
-      // },
+      {
+        name: 'Vietinbank',
+        code_name: 'VTB',
+        url: 'https://www.vietinbank.vn/ca-nhan/ty-gia-khcn',
+        rowSelector: '.hidden #content .table-pin-rows tbody tr',
+        columnSelector: 'td'
+      },
       {
         name: 'BIDV',
         url: 'https://bidv.com.vn/vn/ty-gia-ngoai-te',
         rowSelector: '.table-reponsive  tbody tr',
+        columnSelector: 'td'
+      },
+      {
+        name: 'Agribank',
+        url: 'https://www.agribank.com.vn/vn/ty-gia',
+        rowSelector: '#tyGiaCn table tbody tr',
         columnSelector: 'td'
       }
     ];
