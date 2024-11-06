@@ -15,7 +15,7 @@
         <tbody>
           <% exchangeRateBanks.forEach(function(item) { %>
           <tr>
-            <th scope="row"><%= item.bank.name %></th>
+            <th scope="row" ><a href="/exchange-rate/<%= item.bank.id %>"><%= item.bank.name %></a></th>
             <td><%= item.buy_cash_price %></td>
             <td><%= item.buy_transfer_price %></td>
             <td><%= item.sell_cash_price %></td>

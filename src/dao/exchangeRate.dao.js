@@ -23,9 +23,11 @@ const crawlVietcombankData = async (exchangeData) => {
     
     if(isNaN(buyCashPrice) || buyCashPrice === 0){
       buyCashPrice = null;
-    }else if(isNaN(buyTransferPrice) || buyTransferPrice === 0){
+    }
+    if(isNaN(buyTransferPrice) || buyTransferPrice === 0){
       buyTransferPrice = null;
-    }else if(isNaN(sellCashPrice) || sellCashPrice === 0){
+    }
+    if(isNaN(sellCashPrice) || sellCashPrice === 0){
       sellCashPrice = null;
     }
     // Kiểm tra sự tồn tại của bản ghi
@@ -92,7 +94,7 @@ const getExchangeRateBankByCurrencyId = async(id) => {
     },
     include: [{
       model: Bank,
-      attributes: ['name', 'fullname'],
+      attributes: ['id', 'name', 'fullname'],
     }],
   })
   .then(result => {

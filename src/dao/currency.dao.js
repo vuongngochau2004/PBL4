@@ -1,4 +1,3 @@
-const e = require('express');
 const { Currency } = require('../app/models/index.model');
 
 const crawlCurrency = async (exchangeData) => {

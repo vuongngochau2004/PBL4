@@ -9,6 +9,7 @@ const fetchExchangeRateData = async (sitesConfig) => {
     if(site.name == "Vietcombank"){
       crawlVietcombankData(exchangeRate);
     }
+    
   }));
   return await Promise.all(scrapingPromises);
 };
