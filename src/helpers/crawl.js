@@ -40,7 +40,17 @@ const scheduleScraping = (site, crawlModel) => {
   });
 };
 
+const scheduleScrapingExchangeRate = (site, crawlModel) => {
+  // Lập lịch crawler chạy mỗi giờ
+  cron.schedule('*/10 * * * *', () => {
+    console.log(`Đang chạy crawler cho ${site.name}...`);
+    scrapeSite(site, crawlModel);
+  });
+};
+
+
 module.exports = {
   scrapeSite,
-  scheduleScraping
+  scheduleScraping,
+  scheduleScrapingExchangeRate
 }

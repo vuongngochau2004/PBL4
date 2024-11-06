@@ -21,34 +21,40 @@ const  crawlBank = async (exchangeData)=> {
       });
       continue;  // Bỏ qua hàng này
     }
-  
-    // Kiểm tra nếu createUpdate tồn tại và là một chuỗi hợp lệ
+
     if (createUpdate && typeof createUpdate === 'string' && createUpdate.includes(' ')) {
       try {
-        // Tách chuỗi thành giờ và ngày
         const [time, date] = createUpdate.split(' ');
-  
+
         if (date && time) {
           const [day, month, year] = date.split('/');
           const [hours, minutes, seconds] = time.split(':');
-  
+
           // Kiểm tra từng phần tử để đảm bảo không bị undefined
           if (day && month && year && hours && minutes && seconds) {
-            // Tạo đối tượng Date từ chuỗi đã tách
-            const formattedDate = new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}+07:00`);
-            // console.log(`Formatted date for ${codeNameBank}: `, formattedDate);
-            
-            // Tiếp tục các thao tác với bankModel sau khi tạo thành công formattedDate
-            const [bank, created] = await Bank.findOrCreate({
+            // Tạo đối tượng Date ở UTC
+            const formattedDate = new Date(Date.UTC(year, month - 1, day, hours, minutes, seconds));
+
+            const existingBank = await Bank.findOne({
               where: { name: nameBank },
-              defaults: {
-                name: nameBank,
-                fullname: fullnameBank,
-                last_updated: formattedDate, // Lưu thời gian đã chuyển đổi vào updatedAt
-              },
             });
-            
-            // console.log('bank :: ', bank);
+            // Tiếp tục các thao tác với bankModel sau khi tạo thành công formattedDate
+            if (existingBank) {
+              // Nếu bản ghi đã tồn tại, cập nhật bản ghi
+              await existingBank.update({
+                last_updated: formattedDate,
+              });
+              console.log('Updated successfully!');
+            } else {
+              const [bank, created] = await Bank.findOrCreate({
+                where: { name: nameBank },
+                defaults: {
+                  name: nameBank,
+                  fullname: fullnameBank,
+                  last_updated: formattedDate, // Lưu thời gian đã chuyển đổi vào updatedAt
+                },
+              });
+            }
           } else {
             console.error(`Invalid date or time format for bank ${nameBank}`);
           }

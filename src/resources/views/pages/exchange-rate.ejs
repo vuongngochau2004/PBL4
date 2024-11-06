@@ -14,7 +14,7 @@
       <tbody>
         <% exchangeRates.forEach(function(item) { %>
         <tr>
-          <th scope="row"><a href="/currency/<%= item.currency.code %>"><%= item.currency.code %></a></th>
+          <th scope="row"><a href="/currency/<%= item.currency.code.slice(0, 3) %>"><%= item.currency.code %></a></th>
           <td><%= item.currency.name %></td>
           <td><%= item.buy_cash_price %></td>
           <td><%= item.buy_transfer_price %></td>
