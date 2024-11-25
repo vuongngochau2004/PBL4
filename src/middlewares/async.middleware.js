@@ -7,5 +7,5 @@ function asyncMiddleware(fn) {
     }
   };
 }
-  
+
 module.exports = asyncMiddleware;

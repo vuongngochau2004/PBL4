@@ -18,7 +18,7 @@ const connect = async () => {
     console.log('Connection has been established successfully.');
 
     // Đồng bộ hóa các mô hình với cơ sở dữ liệu
-    await sequelize.sync({ force: false });
+    await sequelize.sync({alter: true});
     console.log('Database & tables created!');
     
   } catch (error) {

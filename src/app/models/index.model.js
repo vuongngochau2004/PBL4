@@ -2,6 +2,7 @@ const { sequelize } = require('./../../configs/database'); // Giả sử bạn �
 const Bank = require('./bank.model');
 const Currency = require('./currency.model');
 const ExchangeRate = require('./exchangeRate.model');
+const User = require('./user.model');
 
 // Liên kết giữa các bảng
 Bank.hasMany(ExchangeRate, { foreignKey: 'bank_id' });
@@ -16,4 +17,5 @@ module.exports = {
   Bank,
   Currency,
   ExchangeRate,
+  User
 };
