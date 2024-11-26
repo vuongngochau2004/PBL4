@@ -33,15 +33,15 @@ const scrapeSite = async (site, crawlModel) => {
 };
 
 const scheduleScraping = (site, crawlModel) => {
-  // Lập lịch crawler chạy mỗi giờ
-  cron.schedule('0 18 * * *', () => {
+  // Lập lịch crawler chạy mỗi ngày lúc 21h
+  cron.schedule('0 21 * * *', () => {
     console.log(`Đang chạy crawler cho ${site.name}...`);
     scrapeSite(site, crawlModel);
   });
 };
 
 const scheduleScrapingExchangeRate = (site, crawlModel) => {
-  // Lập lịch crawler chạy mỗi giờ
+  // Lập lịch crawler chạy mỗi 10 phút
   cron.schedule('*/10 * * * *', () => {
     console.log(`Đang chạy crawler cho ${site.name}...`);
     scrapeSite(site, crawlModel);

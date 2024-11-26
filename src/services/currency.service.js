@@ -1,5 +1,5 @@
-const { scheduleScraping } = require('./../helpers/crawl');
-const { crawlCurrency, getAllCurrencyData, getCurrencyByCode, createCurrency } = require('./../dao/currency.dao');
+const { scheduleScraping } = require('../helpers/crawl');
+const { crawlCurrency, getAllCurrencyData, getCurrencyByCode, createCurrency } = require('../dao/currency.dao');
 const fetchCurrencyData = async (sitesConfig) => {
   const scrapingPromises = sitesConfig.map(site => scheduleScraping(site, crawlCurrency));
   return await Promise.all(scrapingPromises);

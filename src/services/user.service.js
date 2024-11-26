@@ -3,7 +3,7 @@ const { getAllUsers
   , createUser
   , updateUser
   , deleteUser
- } = require('./../dao/user.dao');
+ } = require('../dao/user.dao');
 
 const findAllUsers = async () => {
   return await getAllUsers();

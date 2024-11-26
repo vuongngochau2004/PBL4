@@ -11,8 +11,6 @@ const {
   postForgotPassword 
 } = require('./../../app/controllers/admin/auth.controller');
 const asyncMiddleware = require('./../../middlewares/async.middleware');
-const authMiddleware = require('./../../middlewares/auth.middleware');
-const roleMiddleware = require('./../../middlewares/role.middleware');
 
 router.route('/login')
   .get(asyncMiddleware(getLogin))

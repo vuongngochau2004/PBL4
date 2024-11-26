@@ -36,7 +36,14 @@ module.exports = {
       const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '1d' });
       
       // Gửi token về phía client
-      res.json({ token });
+      res.status(200).json({ 
+        token,
+        user: {
+            id: user.id,
+            fullname: user.fullname,
+            role: user.role,
+        },
+       });
   },
   getRegister: (req, res) => {
       res.render("auth/admin/register", {

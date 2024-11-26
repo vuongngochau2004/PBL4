@@ -1,6 +1,6 @@
-const { findAllBank } = require('../../../repository/bank.res');
-const { findAllCurrency, findCurrencyByCode, findAllCurrencyLimit3 } = require('../../../repository/currency.res');
-const { findExchangeRateBankByCurrencyId } = require('../../../repository/exchangeRate.res');
+const { findAllBank } = require('../../../services/bank.service');
+const { findAllCurrency, findCurrencyByCode, findAllCurrencyLimit3 } = require('../../../services/currency.service');
+const { findExchangeRateBankByCurrencyId } = require('../../../services/exchangeRate.service');
 module.exports = {
   getData: async (req,res) =>{
     const curCode = req.params.cur;

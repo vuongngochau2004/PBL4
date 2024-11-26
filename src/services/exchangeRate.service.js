@@ -1,4 +1,4 @@
-const { scrapeSite, scheduleScraping, scheduleScrapingExchangeRate } = require('./../helpers/crawl');
+const { scrapeSite, scheduleScraping, scheduleScrapingExchangeRate } = require('../helpers/crawl');
 const { 
   crawlVietcombankData,
   crawlMBbankData,
@@ -7,7 +7,7 @@ const {
   getExchangeRateByBankId, 
   getExchangeRateCurrencyByBankId,
   getExchangeRateBankByCurrencyId,
-} = require('./../dao/exchangeRate.dao');
+} = require('../dao/exchangeRate.dao');
 
 formatNumber = (number) => {
   if(number == null){
@@ -16,7 +16,7 @@ formatNumber = (number) => {
   return number.toLocaleString('en-US');
 }
 const fetchExchangeRateData = async (sitesConfig) => {
-  const scrapingPromises = sitesConfig.map(site => scrapeSite(site, (exchangeRate) =>{
+  const scrapingPromises = sitesConfig.map(site => scheduleScraping(site, (exchangeRate) =>{
     if(site.name == "Vietcombank"){
       crawlVietcombankData(exchangeRate);
     }
