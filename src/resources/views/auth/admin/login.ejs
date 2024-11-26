@@ -182,8 +182,9 @@
           document.cookie = `token=${data.token}; path=/; Secure`;
           window.location.href = '/admin'; // Chuyển hướng đến trang admin sau khi đăng nhập thành công
         } else {
-          // Hiển thị thông báo lỗi
-          document.getElementById('errorMessage').innerText = data.message;
+          // reload lai trang login va thong bao loi
+          document.getElementById('errorMessage').innerText = data.errMessage;
+          document.getElementById('errorMessage').style.display = 'block';
         }
       } catch (error) {
         console.error('Error:', error);

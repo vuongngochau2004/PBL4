@@ -19,22 +19,13 @@ module.exports = {
 
       if(!user){
           // redender lại trang login với thông báo tài khoản không tồn tại
-          return res.render("auth/admin/login", {
-              pageTitle: "Admin Login",
-              layout: false,
-              errMessage: "Tài khoản không tồn tại",
-          });
+          return res.status(401).json({ errMessage: "Tài khoản không tồn tại" });
       }
 
       const checkPass = bcryptjs.compareSync(password, user.password); 
       if(!checkPass){
           // redender lại trang login với thông báo mật khẩu không đúng
-          return res.render("auth/admin/login", {
-              pageTitle: "Admin Login",
-              layout: false,
-              errMessage: "Mật khẩu không đúng",
-          });
-          // throw new ErrorResponse(401, "Tài khoản không tồn tại!!");
+         return res.status(401).json({ errMessage: "Mật khẩu không đúng" });
       }
       // jwt
       const payload = {
@@ -44,7 +35,6 @@ module.exports = {
       };
       const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '1d' });
       
-      console.log(token);
       // Gửi token về phía client
       res.json({ token });
   },
