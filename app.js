@@ -11,7 +11,7 @@ const webRouter = require('./src/routers/web/index.router');
 
 const db = require('./src/configs/database');
 
-var expressLayouts = require("express-ejs-layouts");
+const expressLayouts = require("express-ejs-layouts");
 db.connect();
 
 // view engine setup
@@ -24,6 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser()); // Sử dụng middleware cookie-parser
 app.use(express.static(path.join(__dirname, "src/public")));
+app.use(express.static(path.join(__dirname, "src/uploads")));
 
 // Crawl data
 createData();

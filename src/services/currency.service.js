@@ -19,6 +19,9 @@ const findAllCurrencyLimit3 = async () =>{
       }
     }
   }
+  for(const row of currencies){
+    row.code_lowercase = row.code.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/Đ/g, 'D').replace(/đ/g, 'd').replace(/\s+/g, '').toLowerCase();
+  }
   return currencies;
 }
 

@@ -40,6 +40,7 @@ const findExchangeRateByBankId = async (id) => {
     row.buy_transfer_price = formatNumber(row.buy_transfer_price);
     row.sell_cash_price = formatNumber(row.sell_cash_price);
     row.sell_transfer_price = formatNumber(row.sell_transfer_price);
+    row.currency.code_lowercase = row.currency.code.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/Đ/g, 'D').replace(/đ/g, 'd').replace(/\s+/g, '').toLowerCase();
   }
   return exchangeRates;
 }
@@ -51,6 +52,7 @@ const findExchangeRateCurrencyByBankId = async (id) => {
     row.buy_transfer_price = formatNumber(row.buy_transfer_price);
     row.sell_cash_price = formatNumber(row.sell_cash_price);
     row.sell_transfer_price = formatNumber(row.sell_transfer_price);
+    row.currency.code_lowercase = row.currency.code.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/Đ/g, 'D').replace(/đ/g, 'd').replace(/\s+/g, '').toLowerCase().slice(0, 3);
   }
   return exchangeRates;
 }
@@ -70,6 +72,7 @@ const findExchangeRateBankByCurrencyId = async (curCode) => {
     row.buy_transfer_price = formatNumber(row.buy_transfer_price);
     row.sell_cash_price = formatNumber(row.sell_cash_price);
     row.sell_transfer_price = formatNumber(row.sell_transfer_price);
+    row.bank.name_lowercase = row.bank.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/Đ/g, 'D').replace(/đ/g, 'd').replace(/\s+/g, '').toLowerCase();
   }
   return exchangeRates;
 }

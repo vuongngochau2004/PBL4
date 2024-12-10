@@ -24,11 +24,22 @@ const findAllBank = async () =>{
   return banks;
 }
 
+const findAllBankToLowerCase = async () =>{
+  const banks = await getAllBankData();
+  for(const row of banks){
+    
+    row.name_lowercase = row.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/Đ/g, 'D').replace(/đ/g, 'd').replace(/\s+/g, '').toLowerCase();
+    // row.name_lowercase = row.name.replace(/\s+/g, '').toLowerCase();
+  }
+  return banks;
+}
+
 const findBankById = async (id) => {
   return await getBankById(id);
 }
 module.exports = {
   fetchBankData,
   findAllBank,
-  findBankById
+  findBankById,
+  findAllBankToLowerCase
 }

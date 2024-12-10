@@ -1,0 +1,266 @@
+body {
+  background-color: #f8f9fa;
+}
+.navbar {
+  background-color: #343a40;
+}
+.navbar-brand, .nav-link, .btn-outline-success {
+  color: #ffffff;
+}
+.nav-link:hover {
+  color: var(--bs-yellow);
+}
+.btn-outline-success {
+  border-color: #ffffff;
+}
+.table {
+  margin-top: 30px;
+}
+.table th, .table td {
+  vertical-align: middle;
+}
+.card {
+  margin-top: 30px;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+}
+.card-body {
+  padding: 20px;
+}
+a{
+text-decoration: none;
+color: black;
+}
+
+a:hover{
+color: var(--bs-yellow);
+}
+
+/* bank icon */
+
+a.bank-icon > span {
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.bak-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  background: url(http://localhost:3000/img/bank40.png) 0 0;
+  background-size: 112px;
+}
+
+.bi-acb {
+  background-position: -0 -16px;
+}
+.bi-abbank {
+  background-position: -16px -0;
+}
+.bi-agribank {
+  background-position: -16px -16px;
+}
+.bi-baoviet {
+  background-position: -32px -0;
+}
+.bi-bidv {
+  background-position: -32px -16px;
+}
+.bi-cbbank {
+  background-position: -0 -32px;
+}
+.bi-donga {
+  background-position: -16px -32px;
+}
+.bi-eximbank {
+  background-position: -32px -32px;
+}
+.bi-gpbank {
+  background-position: -48px -0;
+}
+.bi-hdbank {
+  background-position: -48px -16px;
+}
+.bi-hongleong {
+  background-position: -48px -32px;
+}
+.bi-hsbc {
+  background-position: -0 -48px;
+}
+.bi-indovina {
+  background-position: -16px -48px;
+}
+.bi-kienlong {
+  background-position: -32px -48px;
+}
+.bi-lpbank {
+  background-position: -48px -48px;
+}
+.bi-msb {
+  background-position: -64px -16px;
+}
+.bi-mb {
+  background-position: -64px -0;
+}
+.bi-nama {
+  background-position: -64px -32px;
+}
+.bi-ncb {
+  background-position: -64px -48px;
+}
+.bi-ocb {
+  background-position: -0 -64px;
+}
+.bi-oceanbank {
+  background-position: -16px -64px;
+}
+.bi-pgbank {
+  background-position: -32px -64px;
+}
+.bi-publicbank {
+  background-position: -48px -64px;
+}
+.bi-pvcombank {
+  background-position: -64px -64px;
+}
+.bi-sacombank {
+  background-position: -80px -0;
+}
+.bi-saigonbank {
+  background-position: -80px -16px;
+}
+.bi-scb {
+  background-position: -80px -32px;
+}
+.bi-seabank {
+  background-position: -80px -48px;
+}
+.bi-shb {
+  background-position: -80px -64px;
+}
+.bi-techcombank {
+  background-position: -0 -80px;
+}
+.bi-tpb {
+  background-position: -16px -80px;
+}
+.bi-uob {
+  background-position: -32px -80px;
+}
+.bi-vib {
+  background-position: -48px -80px;
+}
+.bi-vietabank {
+  background-position: -64px -80px;
+}
+.bi-vietbank {
+  background-position: -80px -80px;
+}
+.bi-vietcapitalbank {
+  background-position: -96px -0;
+}
+.bi-vietcombank {
+  background-position: -96px -16px;
+}
+.bi-vietinbank {
+  background-position: -96px -32px;
+}
+.bi-vpbank {
+  background-position: -96px -48px;
+}
+.bi-vrb {
+  background-position: -96px -64px;
+}
+
+/* currency icon */
+
+a.currency-icon > span {
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.cur-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 6px;
+  background: url(http://localhost:3000/img/currencies.png) 0 0;
+}
+
+.ci-cad {
+  background-position: -0 -24px;
+}
+.ci-chf {
+  background-position: -0 -48px;
+}
+.ci-usd {
+  background-position: -0 -576px;
+}
+.ci-eur {
+  background-position: -0 -120px;
+}
+.ci-cny {
+  background-position: -0 -72px;
+}
+.ci-jpy {
+  background-position: -0 -216px;
+}
+.ci-gbp {
+  background-position: -0 -144px;
+}
+.ci-dkk {
+  background-position: -0 -96px;
+}
+.ci-hkd {
+  background-position: -0 -168px;
+}
+.ci-inr {
+  background-position: -0 -192px;
+}
+.ci-krw {
+  background-position: -0 -264px;
+}
+.ci-kwd {
+  background-position: -0 -288px;
+}
+.ci-myr {
+  background-position: -0 -336px;
+}
+.ci-nok {
+  background-position: -0 -360px;
+}
+.ci-nzd {
+  background-position: -0 -384px;
+}
+.ci-rub {
+  background-position: -0 -432px;
+}
+.ci-sar {
+  background-position: -0 -456px;
+}
+.ci-sek {
+  background-position: -0 -480px;
+}
+.ci-sgd {
+  background-position: -0 -504px;
+}
+.ci-thb {
+  background-position: -0 -528px;
+}
+.ci-twd {
+  background-position: -0 -552px;
+}
+.ci-zar {
+  background-position: -0 -648px;
+}
+.ci-php {
+  background-position: -0 -408px;
+}
+.ci-idr {
+  background-position: -0 -624px;
+}
+.ci-khr {
+  background-position: -0 -240px;
+}
+.ci-lak {
+  background-position: -0 -312px;
+}

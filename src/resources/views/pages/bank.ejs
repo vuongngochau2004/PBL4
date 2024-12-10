@@ -11,9 +11,14 @@
           </tr>
         </thead>
         <tbody>
-          <% banks.forEach(function(bank) { %>
+          <% banks.forEach(function(bank) { %> 
           <tr>
-            <th scope="row"><a href= "/exchange-rate/<%= bank.id %>"><%= bank.name %></a></th>
+            <th scope="row">
+              <a href="/exchange-rate/<%= bank.id %>" class="bank-icon" title="Tỷ giá ngân hàng <%= bank.fullname %>">
+                <span class="bak-icon bi-<%= bank.name_lowercase %>"></span>
+                <span><%= bank.name %></span>
+              </a>
+            </th>
             <td><%= bank.fullname %></td>
             <td><%= bank.last_updated %></td>
           </tr>

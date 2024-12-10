@@ -1,29 +1,29 @@
-const { fetchBankData, findAllBank, findBankById } = require('../../../services/bank.service');
-const { fetchCurrencyData, findAllCurrency, addCurrency } = require('../../../services/currency.service');
-const { fetchExchangeRateData, findExchangeRateCurrencyByBankId } = require('../../../services/exchangeRate.service');
+const { findBankById, findAllBankToLowerCase } = require('../../../services/bank.service');
+const { findAllCurrencyLimit3 } = require('../../../services/currency.service');
+const { findExchangeRateCurrencyByBankId } = require('../../../services/exchangeRate.service');
 
 module.exports = {
   getData: async (req, res) => {
-    const banks = await findAllBank();
-    const currencies = await findAllCurrency();
+    const banks = await findAllBankToLowerCase();
+    const currencies = await findAllCurrencyLimit3();
     res.render("pages/bank", {
       banks: banks,
       currencies: currencies,
-      pageTitle: "Exchange Rate"
+      pageTitle: "Tỷ giá ngân hàng tại Việt Nam - Tỷ giá ngoại tệ Việt Nam"
     });
   },
   getDataByBankId: async (req,res) =>{
     const id = req.params.id;
     const bank = await findBankById(id);
-    const banks = await findAllBank();
-    const currencies = await findAllCurrency();
+    const banks = await findAllBankToLowerCase();
+    const currencies = await findAllCurrencyLimit3();
     const exchangeRate = await findExchangeRateCurrencyByBankId(id);
     res.render('pages/exchange-rate', {
       bank: bank,
       exchangeRates: exchangeRate,
       banks: banks,
       currencies: currencies,
-      pageTitle: "Exchange Rate"
+      pageTitle: "Tỷ giá ngân hàng Việt Nam - Tỷ giá ngoại tệ Việt Nam"
     })
   }
 }
