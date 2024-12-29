@@ -1,32 +1,107 @@
-<div class="container">
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">Tỷ giá <%= currency.code %> tại các ngân hàng </h5>
-      <table class="table table-striped table-hover table-bordered">
-        <thead class="table-dark">
-          <tr>
-            <th scope="col">Ngân hàng </th>
-            <th scope="col">Mua tiền mặt</th>
-            <th scope="col">Mua chuyển khoản</th>
-            <th scope="col">Bán tiền mặt</th>
-            <th scope="col">Bán chuyển khoản</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% exchangeRateBanks.forEach(function(item) { %>
-          <tr>
-            <th scope="row"><a href="/exchange-rate/<%= item.bank.id %>" class="bank-icon" title="Tỷ giá ngân hàng <%= item.bank.name %> Việt Nam">
-              <span class="bak-icon bi-<%= item.bank.name_lowercase %>"></span>
-              <span><%= item.bank.name %></span>
-            </a></th>
-            <td><%= item.buy_cash_price %></td>
-            <td><%= item.buy_transfer_price %></td>
-            <td><%= item.sell_cash_price %></td>
-            <td><%= item.sell_transfer_price %></td>
-          </tr>
-          <% }); %>
-        </tbody>
-      </table>
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Tỷ giá <%= currency.code %> tại các ngân hàng </h5>
+    <div class="container mt-4">
+      <h2 class="text-primary mb-4">Chuyển đổi Đô la Mỹ (USD) và Việt Nam Đồng (VND)</h2>
+      
+      <p class="mb-4">
+          Tỷ giá Đô la Mỹ hôm nay là <strong>1 USD = 25.308 VND</strong>. 
+          Tỷ giá trung bình USD được tính từ dữ liệu của <strong>40 ngân hàng (*)</strong> có hỗ trợ giao dịch Đô la Mỹ.
+      </p>
+
+      <div class="row justify-content-center align-items-center g-3">
+          <div class="col-12 col-md-4">
+              <div class="input-group">
+                  <span class="input-group-text">
+                      <img src="/api/placeholder/20/15" alt="US Flag" class="me-2">
+                      USD
+                  </span>
+                  <input type="number" class="form-control" value="1">
+              </div>
+          </div>
+
+          <div class="col-12 col-md-auto text-center">
+              <button id="changeConvert" class="btn btn-primary rounded-circle">
+                  <i class="bi bi-arrow-left-right"></i>
+                  ⇄
+              </button>
+          </div>
+
+          <div class="col-12 col-md-4">
+              <div class="input-group">
+                  <span class="input-group-text">
+                      <img src="/api/placeholder/20/15" alt="Vietnam Flag" class="me-2">
+                      VND
+                  </span>
+                  <input type="number" class="form-control" value="25308">
+              </div>
+          </div>
+      </div>
+
+      <div class="text-center mt-4">
+          <h3 class="mb-3">
+              <span class="text-primary">1 USD</span> = 
+              <span class="text-danger">25.308 VND</span>
+          </h3>
+          <p class="text-muted">
+              (Tỷ giá Trung bình: 1 USD = 25.308 VND, 22:55:12 29/12/2024)
+          </p>
+      </div>
     </div>
+
+    <table class="table table-hover table-bordered">
+      <thead class="table">
+        <tr>
+          <th scope="col">Ngân hàng </th>
+          <th scope="col">Mua tiền mặt</th>
+          <th scope="col">Mua chuyển khoản</th>
+          <th scope="col">Bán tiền mặt</th>
+          <th scope="col">Bán chuyển khoản</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% exchangeRateBanks.forEach(function(item) { %>
+        <tr>
+          <th scope="row"><a href="/exchange-rate/<%= item.bank.id %>" class="bank-icon" title="Tỷ giá ngân hàng <%= item.bank.name %> Việt Nam">
+            <span class="bak-icon bi-<%= item.bank.name_lowercase %>"></span>
+            <span><%= item.bank.name %></span>
+          </a></th>
+          <td><%= item.buy_cash_price %></td>
+          <td><%= item.buy_transfer_price %></td>
+          <td><%= item.sell_cash_price %></td>
+          <td><%= item.sell_transfer_price %></td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="card pg-3 p-3" style="height: 450px">
+  <div class="card-header bg-white">
+      <h5 class="mb-0">$ Tỷ giá Vietcombank</h5>
+  </div>
+  <div class="table-responsive">
+      <table class="table table-hover mb-0">
+          <thead>
+              <tr>
+                  <th class="text-brown">Ngoại tệ</th>
+                  <th class="text-brown">Mua vào</th>
+                  <th class="text-brown">Bán ra</th>
+              </tr>
+          </thead>
+          <tbody>
+            <% exchangeRateVietcombank.forEach(function(item) { %>
+              <tr>
+                  <td><a href="/currency/<%= item.currency.code.slice(0, 3) %>" title="Tỷ giá <%= item.currency.code %>"><%= item.currency.code %></a></td>
+                  <td><%= item.buy_cash_price %></td>
+                  <td><%= item.sell_cash_price %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+      </table>
+  </div>
+  <div class="card-footer text-muted text-center">
+      <small>Cập nhật lúc <%= dateUpdate %></small><br>
+      <small><a href="/exchange-rate/37" class="text-primary text-decoration-none">Xem bảng tỷ giá hối đoái vietcombank.com </a></small>
   </div>
 </div>

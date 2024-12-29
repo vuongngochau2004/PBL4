@@ -27,7 +27,8 @@ const bank = sequelize.define('bank', {
     allowNull: true,      // Có thể null nếu dữ liệu không hợp lệ
   },
 }, {
-  timestamps: true,      // Tự động thêm createdAt và updatedAt
+  timestamps: true,  
+  underscored: true
 });
 
 

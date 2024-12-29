@@ -16,7 +16,8 @@ const currency = sequelize.define('currency', {
     allowNull: false,
   },
 }, {
-  timestamps: true
+  timestamps: true,
+  underscored: true
 });
 
 module.exports = currency;

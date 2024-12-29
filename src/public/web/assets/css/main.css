@@ -1,8 +1,11 @@
 body {
-  background-color: #f8f9fa;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #212529;
 }
 .navbar {
-  background-color: #343a40;
+  background-color: #3e83c9;
 }
 .navbar-brand, .nav-link, .btn-outline-success {
   color: #ffffff;
@@ -16,24 +19,26 @@ body {
 .table {
   margin-top: 30px;
 }
+.table thead th{
+  font-weight: 500px;
+}
 .table th, .table td {
   vertical-align: middle;
 }
 .card {
   margin-top: 30px;
   border: 1px solid #dee2e6;
-  border-radius: 10px;
+  border-radius: 0;
 }
 .card-body {
   padding: 20px;
 }
 a{
-text-decoration: none;
-color: black;
+  text-decoration: none;
 }
 
 a:hover{
-color: var(--bs-yellow);
+  color: var(--bs-yellow);
 }
 
 /* bank icon */
@@ -263,4 +268,13 @@ a.currency-icon > span {
 }
 .ci-lak {
   background-position: -0 -312px;
+}
+.ci-vnd {
+  background-position: -0 -600px;
+}
+
+.custom-dropdown {
+  width: 300px; /* Chiều rộng  */
+  max-height: 200px; /* Chiều cao tối đa */
+  overflow-y: auto;  /* Hiển thị thanh cuộn dọc */
 }

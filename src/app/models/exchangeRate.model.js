@@ -43,6 +43,9 @@ const exchangeRate = sequelize.define('exchangeRate', {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
+},{
+  timestamps: true,
+  underscored: true
 });
 
 module.exports = exchangeRate;

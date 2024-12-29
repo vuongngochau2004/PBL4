@@ -32,6 +32,7 @@ const findCurrencyByCode = async (code) => {
 const addCurrency = async (currencies) => {
   return await createCurrency(currencies);
 }
+
 module.exports = {
   fetchCurrencyData,
   findAllCurrency,

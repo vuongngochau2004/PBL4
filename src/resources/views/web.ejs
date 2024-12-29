@@ -13,9 +13,51 @@
     <!-- Navbar Start -->
     <%- include('./elements/web/header.ejs') %>
     <!-- Navbar End -->
-    <div class="container">
+    <div class="container d-flex justify-content-between">
         <%- body %>
     </div>
     
   </body>
+  <script>
+    const searchInput = document.getElementById('search');
+    const resultsList = document.getElementById('results');
+
+  
+    let timeout;
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value;
+      resultsList.classList.remove('show');
+      if (query.length > 0) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          fetch(`/search?q=${query}`)
+            .then(response => response.json())
+            .then(data => {
+              if (data.length > 0) {
+                resultsList.classList.add('show');
+                data.map(item => {
+                  if (item.type === 'Currency') {
+                    item.name = `Ngoại tệ - ${item.code} - ${item.name}`;
+                    item.code = item.code.slice(0, 3);
+                    item.href = `/currency/${item.code}`;
+                  } else if (item.type === 'Bank') {
+                    item.name = `Tỷ giá - ${item.name} - ${item.fullname}`;
+                    item.href = `/exchange-rate/${item.id}`;
+                  }
+                });
+                resultsList.innerHTML = data.map(item => 
+                  `<li><a class="dropdown-item" href="${item.href}" >${item.name}</a></li>`
+                ).join('');
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              resultsList.innerHTML = '<li>Đã có lỗi xảy ra!</li>';
+            });
+        }, 500); // Chờ 500ms sau khi người dùng dừng gõ để gửi yêu cầu
+      } else {
+        resultsList.innerHTML = '';
+      }
+    });
+  </script>
 </html>

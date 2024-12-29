@@ -50,8 +50,6 @@ const getAllCurrencyData = async () =>{
   });
 } 
 
-
-
 const getCurrencyByCode = async (code) => {
   return await Currency.findOne({
     where:{

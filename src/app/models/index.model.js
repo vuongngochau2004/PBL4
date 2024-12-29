@@ -8,8 +8,7 @@ const User = require('./user.model');
 Bank.hasMany(ExchangeRate, { foreignKey: 'bank_id' });
 Currency.hasMany(ExchangeRate, { foreignKey: 'currency_id' });
 ExchangeRate.belongsTo(Bank, { foreignKey: 'bank_id' });
-ExchangeRate.belongsTo(Currency, { foreignKey: 'currency_id' });
-
+ExchangeRate.belongsTo(Currency, { foreignKey: 'currency_id' }); 
 
 // Xuất ra tất cả các models
 module.exports = {
