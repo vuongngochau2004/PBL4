@@ -5,15 +5,21 @@
           <li class="nav-item">
               <a href="/admin" id="home" class="nav-link">
                   <i class="fas fa-tachometer-alt me-2"></i>
-                  <span>Dashboard</span>
+                  <span>Thống kê</span>
               </a>
           </li>
           <li class="nav-item">
               <a href="/admin/users" id="users" class="nav-link">
                   <i class="fas fa-users me-2"></i>
-                  <span>Users</span>
+                  <span>Thông tin khách hàng</span>
               </a>
           </li>
+          <li class="nav-item">
+            <a href="/admin/profile" id="user" class="nav-link">
+                <i class="fas fa-user me-2"></i>
+                <span>Thông tin cá nhân</span>
+            </a>
+        </li>
       </ul>
   </div>
 </div>
@@ -21,8 +27,9 @@
   const url = window.location.href;
   if (url.includes('/admin/users')) {
     document.getElementById('users').classList.add('active');
-  }
-  else {
+  } else if (url.includes('/admin/profile')) {
+    document.getElementById('user').classList.add('active');
+  } else {
     document.getElementById('home').classList.add('active');
   }
 

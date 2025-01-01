@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/web/assets/images/logo.png" type="image/x-icon">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <title>Register</title>
     <style>
         :root {
-            --primary-color: #6366f1;
-            --primary-dark: #4f46e5;
+          --primary-color: #3e83c9;
+            --primary-dark: #305edb;
             --secondary-color: #64748b;
         }
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            background: linear-gradient(135deg, #3e83c9 0%, #305edb 100%);
             font-family: 'Inter', sans-serif;
             display: flex;
             align-items: center;
@@ -192,9 +194,37 @@
             background-color: var(--primary-color);
             border-color: var(--primary-color);
         }
+        .btn-back {
+          position: fixed;
+          top: 20px;
+          left: 20px;
+          padding: 0.75rem 1.5rem;
+          border-radius: 1rem;
+          background: linear-gradient(135deg, #3e83c9 0%, #305edb 100%);
+          border: none;
+          color: white;
+          font-weight: 600;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-back:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 16px -4px rgba(99,102,241,0.5);
+          color: white;
+      }
     </style>
 </head>
 <body>
+    <a href="/" class="btn btn-back">
+      <i class="fas fa-arrow-left"></i>
+      Trang chủ
+    </a>
     <div class="container">
         <div class="signup-card">
             <div class="signup-header">

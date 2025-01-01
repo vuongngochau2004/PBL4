@@ -1,4 +1,6 @@
-const { Bank } = require('../app/models/index.model');
+const { Bank, ExchangeRate } = require('../app/models/index.model');
+const Sequelize = require('sequelize');
+const { Op } = Sequelize;
 
 const  crawlBank = async (exchangeData)=> {
   for (const row of exchangeData) {
@@ -90,8 +92,36 @@ const getBankById = async (id) =>{
     return [];  // Trả về mảng rỗng nếu có lỗi xảy ra
   });
 } 
+
+const getBanksFromExchangeRates = async () => {
+  try {
+    // Truy vấn để lấy tất cả ngân hàng có trong bảng exchange-rates
+    const exchangeRates = await ExchangeRate.findAll({
+      attributes: ['bank_id'], // Lấy ra chỉ trường bankId
+      group: ['bank_id'], // Nhóm theo bankId để loại bỏ trùng lặp
+    });
+
+    // Lấy danh sách bankId
+    const bankIds = exchangeRates.map((rate) => rate.bank_id);
+
+    // Lấy các ngân hàng tương ứng với bankIds
+    const banks = await Bank.findAll({
+      where: {
+        id: bankIds,
+      },
+      raw: true, // Trả về dữ liệu dưới dạng mảng thay vì đối tượng Sequelize
+    });
+
+    return banks;
+  } catch (error) {
+    console.error('Error retrieving banks:', error);
+    throw error;
+  }
+}
+
 module.exports = {
   getAllBankData,
   crawlBank,
-  getBankById
+  getBankById,
+  getBanksFromExchangeRates,
 }

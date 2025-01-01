@@ -5,19 +5,24 @@ const formatNumber = (number) => {
   return number.toLocaleString('en-US');
 }
 
-const formatDateTime = (isoDateString) => {
-  const date = new Date(isoDateString);
+const formatDateTime = (input) => {
+  const date = new Date(input);
+  if (isNaN(date)) {
+    console.error('Invalid date input:', input);
+    return 'Invalid Date';
+  }
 
   const year = date.getUTCFullYear();
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0, cần +1
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
   const day = String(date.getUTCDate()).padStart(2, '0');
 
   const hours = String(date.getUTCHours()).padStart(2, '0');
   const minutes = String(date.getUTCMinutes()).padStart(2, '0');
   const seconds = String(date.getUTCSeconds()).padStart(2, '0');
 
-  return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
-}
+  return `${hours}:${minutes}:${seconds} ${day}/${month}/${year}`;
+};
+
 
 const formatDate = (isoDateString) => {
   const date = new Date(isoDateString);

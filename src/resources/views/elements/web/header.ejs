@@ -37,14 +37,20 @@
         </li>
       </ul>
       <% if (user) { %>
-        <div class="user-info btn">
-          <a href="/profile" class="user-name"><%= user.fullname %></a>
-          <a href="/auth/logout" class="btn btn-outline-warning">Đăng xuất</a>
+        <div class="user-info">
+          <div class="profile-user">
+            <img src="http://localhost:3000/img/default.jpg" width="20" height="20" class="rounded-circle">
+            <a href="/profile" class="user-name"><%= user.fullname %></a>
+          </div>
+          <% if (user.role === 'admin') { %>
+            <a href="/admin" class="btn btn-outline" style="margin-right: 1rem;">Quản trị</a>
+          <% } %>
+          <a href="/auth/logout" class="btn btn-outline">Đăng xuất</a>
         </div>
       <% } else { %>
-      <div class="login btn">
-        <a href="/auth/login" class="btn btn-outline-warning">Đăng nhập</a>
-        <a href="/auth/register" class="btn btn-warning">Đăng ký</a>
+      <div class="login">
+        <a href="/auth/login" class="btn btn-outline btn-in-out">Đăng nhập</a>
+        <a href="/auth/register" class="btn btn-outline btn-in-out">Đăng ký</a>
       </div>
       <% } %>
       <div class="d-block" style="width: 300px;">

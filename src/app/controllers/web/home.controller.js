@@ -1,11 +1,11 @@
 const { searchData } = require('./../../../services/search.service');
-const { findAllBankToLowerCase } = require('./../../../services/bank.service');
+const { findBanksFromExchangeRates } = require('./../../../services/bank.service');
 const { findAllCurrencyLimit3 } = require('./../../../services/currency.service');
 const { findExchangeRateVietcombank, dateUpdateVietcombank } = require('./../../../services/exchangeRate.service');
 
 module.exports = {
   getData: async (req, res) => {
-    const banks = await findAllBankToLowerCase();
+    const banks = await findBanksFromExchangeRates();
     const currencies = await findAllCurrencyLimit3();
     const exchangeRateVietcombank = await findExchangeRateVietcombank();
     const dateUpdate = await dateUpdateVietcombank();
@@ -21,5 +21,11 @@ module.exports = {
     const query = req.query.q;
     const results = await searchData(query);
     res.json(results);
-  }
+  }, 
+  getProfile: async (req, res) => {
+    console.log('ok');
+    res.render("pages/profile", {
+      pageTitle: "Trang cá nhân",
+    });
+  },
 }

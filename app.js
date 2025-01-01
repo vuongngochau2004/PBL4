@@ -41,6 +41,26 @@ app.use("/", (req, res, next) => {
   next();
 }, webRouter);
 
+
+// Middleware to handle 404 error
+app.use((err, req, res, next) => {
+    //  Nếu lỗi là 404, render trang 404
+    if (err.statusCode === 404 || err.statusCode === 401 || err.statusCode === 403) {
+        return res.status(404).render('pages/404', { 
+            pageTitle: '404 - Page Not Found', 
+            layout: false 
+        });
+    }
+});
+
+// page 404
+app.use((req, res) => {
+  res.render('pages/404', { 
+    pageTitle: '404 - Page Not Found', 
+    layout: false 
+  });
+});
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });

@@ -1,4 +1,4 @@
-const { findBankById, findAllBankToLowerCase } = require('../../../services/bank.service');
+const { findBankById, findBanksFromExchangeRates } = require('../../../services/bank.service');
 const { findAllCurrencyLimit3 } = require('../../../services/currency.service');
 const { findExchangeRateCurrencyByBankId, 
   findExchangeRateCurrencyByBankIdAndDate,
@@ -19,7 +19,7 @@ module.exports = {
     if(!query){
       const id = req.params.id;
       const bank = await findBankById(id);
-      const banks = await findAllBankToLowerCase();
+      const banks = await findBanksFromExchangeRates();
       const currencies = await findAllCurrencyLimit3();
       const exchangeRate = await findExchangeRateCurrencyByBankId(id);
       const exchangeRateVietcombank = await findExchangeRateVietcombank();
@@ -38,7 +38,7 @@ module.exports = {
     }else{
       const id = req.params.id;
       const bank = await findBankById(id);
-      const banks = await findAllBankToLowerCase();
+      const banks = await findBanksFromExchangeRates();
       const currencies = await findAllCurrencyLimit3();
       let exchangeRate = [];
       const exchangeRateVietcombank = await findExchangeRateVietcombank();
@@ -76,7 +76,7 @@ module.exports = {
     if(!currency1 && !currency2){
       const bank = await findBankById(id);
       // header
-      const banks = await findAllBankToLowerCase();
+      const banks = await findBanksFromExchangeRates();
       const currencies = await findAllCurrencyLimit3();
       const exchangeRate = await findExchangeRateCurrencyByBankId(id);
     
@@ -86,8 +86,6 @@ module.exports = {
   
       const dates = datesOfWeekPre(date);
       const data = await getExchangeRateByBankIdAndDateAndCurrency(id, dates, ['USD' , 'EUR']);
-      console.log(data);
-
       res.render('pages/chart', {
         dateExchange: date,
         data,

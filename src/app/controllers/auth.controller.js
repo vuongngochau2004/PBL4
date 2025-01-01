@@ -63,6 +63,7 @@ module.exports = {
               email: email,
               password: password,
               role: "customer",
+              image: "default.jpg",
           }
       );
       res.redirect("login");
@@ -71,9 +72,6 @@ module.exports = {
     // Xóa token khỏi cookie
     res.clearCookie("token");
 
-    res.render("auth/admin/login", {
-        pageTitle: "Admin Logout",
-        layout: false,
-    });
+    res.redirect("/");
   },   
 }

@@ -9,7 +9,8 @@ module.exports = async (req, res, next) => {
     const token = req.cookies.token;
 
     if (!token) {
-        return next(new ErrorResponse(401, 'Unauthorized'));
+        res.locals.user = null; // Không tìm thấy user, gán user là null
+        return next();
     }
 
     try {

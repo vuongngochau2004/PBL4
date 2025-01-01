@@ -9,6 +9,16 @@ const findAllUsers = async () => {
   return await getAllUsers();
 }
 
+const findAllCustomers = async () => {
+  const users = await getAllUsers();
+  for (let i = 0; i < users.length; i++) {
+    if (users[i].role === 'admin') {
+      users.splice(i, 1);
+    }
+  }
+  return users;
+}
+
 const findUserById = async (id) => {
   return await getUserById(id);
 } 
@@ -30,5 +40,6 @@ module.exports = {
   findUserById,
   addUser,
   editUser,
-  removeUser
+  removeUser,
+  findAllCustomers,
 }

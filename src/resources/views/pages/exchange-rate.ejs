@@ -6,19 +6,19 @@
     <div class="container">
       <div class="row align-items-center">
         <div class="col-auto">
-          <div class="calendar-icon bg-primary text-white p-2 rounded">
+          <div class="calendar-icon p-2 rounded">
             <i class="bi bi-calendar"></i>
             <span class="ms-2"><%= dateExchangeRate %></span>
           </div>
         </div>
         <div class="col">
-          <a href="/exchange-rate/<%= bank.id %>/chart?date=<%= dateExchangeRate %>" class="btn btn-warning float-end" >Xem biểu đồ</a>
+          <a href="/exchange-rate/<%= bank.id %>/chart?date=<%= dateExchangeRate %>" class="btn btn-color float-end" >Xem biểu đồ</a>
         </div>
         <div class="col text-end">
-          <a href="/exchange-rate/<%= bank.id %>?date=<%= dateExchangeRate %>&action=pre" class="btn btn-outline-secondary me-2">
+          <a href="/exchange-rate/<%= bank.id %>?date=<%= dateExchangeRate %>&action=pre" class="btn btn-color me-2">
             <i class="bi bi-chevron-left"></i> HÔM TRƯỚC
           </a>
-          <a href="/exchange-rate/<%= bank.id %>?date=<%= dateExchangeRate %>&action=next" class="btn btn-outline-secondary">
+          <a href="/exchange-rate/<%= bank.id %>?date=<%= dateExchangeRate %>&action=next" class="btn btn-color">
             HÔM SAU <i class="bi bi-chevron-right"></i>
           </a>
         </div>
