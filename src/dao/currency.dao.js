@@ -1,7 +1,6 @@
 const { Currency } = require('../app/models/index.model');
 
 const createCurrency = async (currencies) => {
-  console.log("ok");
   currencies.forEach(async (currency) => {
     await Currency.findOrCreate({
       where: { code: currency.code },

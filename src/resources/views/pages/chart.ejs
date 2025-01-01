@@ -1,0 +1,278 @@
+
+<div class="card">
+  <div class="card-body">
+
+    <div class="container my-4">
+      <h2>Biểu đồ tỷ giá ngoại tệ so với VND</h2>
+      <p class="text-muted">Theo tỷ giá ngân hàng bán chuyển khoản</p>
+
+      <div class="row g-3 mb-4">
+          <div class="col-md-3">
+            <div class="input-group position-relative">
+              <button id="currencyButton1" class="form-select dropdown-toggle" data-bs-toggle="dropdown">
+                  <img id="selectedFlag1" class="me-2 currency-icon cur-icon ci-usd" >
+                  <span id="selectedCurrency1" >USD</span>
+              </button>
+              <div class="dropdown-menu w-200">
+                  <div class="px-3 py-2 sticky-top bg-white">
+                      <input type="text" class="form-control" placeholder="Tìm nhanh ngoại tệ">
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <div style="max-height: 300px; overflow-y: auto;">
+                    <% exchangeRates.forEach(function(item) { %>
+                      <a class="dropdown-item" onclick="selectCurrency1('<%= item.currency.code %>')">
+                          <img class="me-2 currency-icon cur-icon ci-<%= item.currency.code_lowercase %>">
+                          <%= item.currency.code %> - <%= item.currency.name %>
+                      </a>
+                    <% }); %>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group position-relative">
+              <button id="currencyButton2" class="form-select dropdown-toggle" data-bs-toggle="dropdown">
+                  <img id="selectedFlag2" class="me-2 currency-icon cur-icon ci-eur">
+                  <span id="selectedCurrency2" >EUR</span>
+              </button>
+              <div class="dropdown-menu w-200">
+                  <div class="px-3 py-2 sticky-top bg-white">
+                      <input type="text" class="form-control" placeholder="Tìm nhanh ngoại tệ">
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <div style="max-height: 300px; overflow-y: auto;">
+                    <% exchangeRates.forEach(function(item) { %>
+                      <a class="dropdown-item" onclick="selectCurrency2('<%= item.currency.code %>')">
+                          <img class="me-2 currency-icon cur-icon ci-<%= item.currency.code_lowercase %>">
+                          <%= item.currency.code %> - <%= item.currency.name %>
+                      </a>
+                    <% }); %>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <script>
+            function selectCurrency1(currencyCode) {
+                document.getElementById('selectedFlag1').className = 'me-2 currency-icon cur-icon ci-' + currencyCode.toLowerCase();
+                document.getElementById('selectedCurrency1').textContent = currencyCode;
+            }
+            function selectCurrency2(currencyCode) {
+                document.getElementById('selectedFlag2').className = 'me-2 currency-icon cur-icon ci-' + currencyCode.toLowerCase();
+                document.getElementById('selectedCurrency2').textContent = currencyCode;
+            }
+            </script>
+          <div class="col-md-3">
+              <div class="input-group">
+                  <span class="input-group-text">Từ ngày</span>
+                  <input type="text" class="form-control" value="<%= data.dates[0] %>" readonly>
+                  <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+              </div>
+          </div>
+          <div class="col-md-3">
+              <div class="input-group">
+                  <span class="input-group-text">Đến ngày</span>
+                  <input type="text" class="form-control" value="<%= data.dates[data.dates.length -1] %>" readonly>
+                  <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+              </div>
+          </div>
+      </div>
+
+      <button id="viewChart" class="btn btn-warning float-end" >Xem biểu đồ</button>
+      <div class="clearfix mb-4"></div>
+
+      <canvas id="exchangeRateChart"></canvas>
+    </div>
+
+    <script>
+      
+      const usdRates = [<% data.rates.USD.filter(rate => rate !== null).forEach(function(rate) { %><%= rate %>,<% }); %>];
+      const eurRates = [<% data.rates.EUR.filter(rate => rate !== null).forEach(function(rate) { %><%= rate %>,<% }); %>];
+
+      // const allRates = usdRates.concat(eurRates);
+      const minUsdRate = Math.min(...usdRates);
+      const maxUsdRate = Math.max(...usdRates);
+      console.log(minUsdRate, maxUsdRate);
+      const minEurRate = Math.min(...eurRates);
+      const maxEurRate = Math.max(...eurRates);
+      const rangeUsd = maxUsdRate - minUsdRate;
+      const rangeEur = maxEurRate - minEurRate;
+
+      const stepSizeUsd = rangeUsd / 7; // Chia thành 10 bước
+      const stepSizeEur = rangeEur / 7; // Chia thành 10 bước
+      const ctx = document.getElementById('exchangeRateChart').getContext('2d');
+      let chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+              labels: [<% data.dates.forEach(function(date) { %>'<%= date %>',<% }); %>],
+              datasets: [{
+                  label: 'USD',
+                  data: [<% data.rates.USD.forEach(function(rate) { %><%= rate === null ? 'null' : rate %>,<% }); %>],
+                  borderColor: '#0d6efd',
+                  yAxisID: 'y',
+                  spanGaps: true // Tự động bỏ qua các giá trị null
+              }, {
+                  label: 'EUR',
+                  data: [<% data.rates.EUR.forEach(function(rate) { %><%= rate === null ? 'null' : rate %>,<% }); %>],
+                  borderColor: '#fd7e14',
+                  yAxisID: 'y1',
+                  spanGaps: true // Tự động bỏ qua các giá trị null
+              }]
+          },
+          options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            scales: {
+                y: {
+                    type: 'linear',
+                    position: 'left',
+                    min: minUsdRate,
+                    max: maxUsdRate,
+                    ticks: {
+                        stepSize: stepSizeUsd,
+                        callback: function(value) {
+                            return value !== null ? value : '';
+                        }
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    position: 'right',
+                    min: minEurRate,
+                    max: maxEurRate,
+                    ticks: {
+                        stepSize: stepSizeEur,
+                        callback: function(value) {
+                            return value !== null ? value : '';
+                        }
+                    }
+                }
+            }
+          }
+      });
+
+      const viewChartButton = document.getElementById('viewChart');
+      
+      
+      const bankId = "<%= bank.id %>"; 
+      const dateExchange = "<%= dateExchange %>";
+      document.getElementById("viewChart").addEventListener("click", function() {
+            const selectedCurrency1 = document.getElementById('selectedCurrency1').textContent;
+            const selectedCurrency2 = document.getElementById('selectedCurrency2').textContent; 
+            // Gửi yêu cầu fetch để lấy dữ liệu mới
+            fetch(`/exchange-rate/${bankId}/chart?date=${dateExchange}&currency1=${selectedCurrency1}&currency2=${selectedCurrency2}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Cập nhật lại dữ liệu cho chart với dữ liệu mới
+                    updateChart(data);
+                })
+                .catch(error => {
+                    console.error("Có lỗi khi lấy dữ liệu:", error);
+                });
+        });
+
+        // Hàm cập nhật chart với dữ liệu mới
+        function updateChart(data) {
+
+            const dates = data.data.dates || []; // Lấy dates, mặc định là mảng rỗng nếu không có
+            const rates = data.data.rates || {}; // Lấy rates, mặc định là đối tượng rỗng nếu không có
+
+            const selectedCur1 = document.getElementById('selectedCurrency1').textContent;
+            const selectedCur2 = document.getElementById('selectedCurrency2').textContent;
+            // Kiểm tra nếu rates có chứa dữ liệu cho các loại tiền tệ đã chọn
+            const currency1Rates = rates[selectedCur1] || [];
+            const currency2Rates = rates[selectedCur2] || [];
+
+            // Nếu một trong các tỷ giá là mảng rỗng, có thể có vấn đề với dữ liệu
+            if (currency1Rates.length === 0 || currency2Rates.length === 0) {
+                console.error("Không có dữ liệu tỷ giá cho các loại tiền tệ này.");
+                return; // Dừng lại nếu không có dữ liệu hợp lệ
+            }
+
+            // Lọc các giá trị null
+            const filteredDates = [];
+            const filteredCurrency1Rates = [];
+            const filteredCurrency2Rates = [];
+
+            for (let i = 0; i < dates.length; i++) {
+                filteredDates.push(dates[i]);
+                if (currency1Rates[i] !== null && currency2Rates[i] !== null) {
+                  filteredCurrency1Rates.push(currency1Rates[i]);
+                  filteredCurrency2Rates.push(currency2Rates[i]);
+                }
+            }
+
+            // Tính toán min và max cho cả hai loại tiền tệ
+            const minRateCurrency1 = Math.min(...filteredCurrency1Rates);
+            const maxRateCurrency1 = Math.max(...filteredCurrency1Rates);
+            const minRateCurrency2 = Math.min(...filteredCurrency2Rates);
+            const maxRateCurrency2 = Math.max(...filteredCurrency2Rates);
+
+            // Tính toán min và max tổng thể
+            const rangeCurrency1 = maxRateCurrency1 - minRateCurrency1;
+            const rangeCurrency2 = maxRateCurrency2 - minRateCurrency2;
+
+            // Cập nhật chart với dữ liệu mới
+            chart.data.labels = filteredDates; // Cập nhật nhãn (dates)
+            chart.data.datasets[0].data = filteredCurrency1Rates; // Cập nhật dữ liệu cho currency1
+            chart.data.datasets[1].data = filteredCurrency2Rates; // Cập nhật dữ liệu cho currency2
+            chart.update(); // Cập nhật lại chart
+
+            // Cập nhật scales với minRate và maxRate
+            chart.options.scales.y.min = minRateCurrency1;
+            chart.options.scales.y.max = maxRateCurrency1;
+            chart.options.scales.y1.min = minRateCurrency2;
+            chart.options.scales.y1.max = maxRateCurrency2;
+
+            // Tính toán stepSize
+            const stepSizeCurrency1 = (maxRateCurrency1 - minRateCurrency1) / 7; 
+            const stepSizeCurrency2 = (maxRateCurrency2 - minRateCurrency2) / 7;
+
+            chart.options.scales.y.ticks.stepSize = stepSizeCurrency1;
+            chart.options.scales.y1.ticks.stepSize = stepSizeCurrency2;
+
+            // Cập nhật label cho chart
+            chart.data.datasets[0].label = selectedCur1;
+            chart.data.datasets[1].label = selectedCur2;
+
+            // Cập nhật chart với dữ liệu mới
+            chart.data.labels = filteredDates; // Cập nhật nhãn (dates)
+            chart.data.datasets[0].data = filteredCurrency1Rates; // Cập nhật dữ liệu cho currency1
+            chart.data.datasets[1].data = filteredCurrency2Rates; // Cập nhật dữ liệu cho currency2
+            chart.update(); // Cập nhật lại chart
+        }
+
+    </script>
+  </div>
+</div>
+<div class="card pg-3 p-3" style="height: 450px">
+  <div class="card-header bg-white">
+      <h5 class="mb-0">$ Tỷ giá Vietcombank</h5>
+  </div>
+  <div class="table-responsive">
+      <table class="table table-hover mb-0">
+          <thead>
+              <tr>
+                  <th class="text-brown">Ngoại tệ</th>
+                  <th class="text-brown">Mua vào</th>
+                  <th class="text-brown">Bán ra</th>
+              </tr>
+          </thead>
+          <tbody>
+            <% exchangeRateVietcombank.forEach(function(item) { %>
+              <tr>
+                  <td><a href="/currency/<%= item.currency.code.slice(0, 3) %>" title="Tỷ giá <%= item.currency.code %>"><%= item.currency.code %></a></td>
+                  <td><%= item.buy_cash_price %></td>
+                  <td><%= item.sell_cash_price %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+      </table>
+  </div>
+  <div class="card-footer text-muted text-center">
+      <small>Cập nhật lúc <%= dateUpdate %></small><br>
+      <small><a href="/exchange-rate/37" class="text-primary text-decoration-none">Xem bảng tỷ giá hối đoái vietcombank.com </a></small>
+  </div>
+</div>

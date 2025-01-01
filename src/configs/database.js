@@ -10,6 +10,7 @@ const { Sequelize } = require('sequelize');
     acquire: 30000,     // Thời gian tối đa (ms) để cố gắng kết nối trước khi throw lỗi
     idle: 10000         // Thời gian (ms) một kết nối có thể idle trước khi bị đóng
   },
+  logging: false
 });
 const connect = async () => {
   try {
@@ -18,7 +19,7 @@ const connect = async () => {
     console.log('Connection has been established successfully.');
 
     // Đồng bộ hóa các mô hình với cơ sở dữ liệu
-    await sequelize.sync({alter: false});
+    await sequelize.sync({alter: true});
     console.log('Database & tables created!');
     
   } catch (error) {

@@ -1,0 +1,152 @@
+<div class="container-fluid px-4">
+  <div class="card">
+    <div class="table-card">
+        <!-- Table Header -->
+        <div class="table-header d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="fw-bold mb-1">User Management</h5>
+                <p class="text-secondary mb-0">Manage your team members and their roles</p>
+            </div>
+            <div class="d-flex gap-3">
+                <div class="position-relative">
+                    <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
+                    <input type="text" class="form-control search-input ps-5" placeholder="Search users...">
+                </div>
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Add User
+                </button>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Address</th>
+                        <th>Phone</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <div class="fw-semibold">Vương Ngọc Hậu</div>
+                                    <div class="text-secondary small">vuongngochau2004@gmail.com</div>
+                                </div>
+                            </div>
+                        </td>
+                       
+                        
+                        <td>
+                            <div class="d-flex align-items-center">
+                                K97 Nguyễn Lương Bằng, Liên Chiểu, Đà Nẵng
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                0393 453 221
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-shield-alt me-2 text-primary"></i>
+                                Admin
+                            </div>
+                        </td>
+                        <td>
+                            <span class="status-badge status-active">Active</span>
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <button class="action-btn" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <div class="fw-semibold">Võ Ngọc Huy</div>
+                                    <div class="text-secondary small">huyvo2004@gmail.com</div>
+                                </div>
+                            </div>
+                        </td>
+                       
+                        
+                        <td>
+                            <div class="d-flex align-items-center">
+                                K82 Nguyễn Lương Bằng, Liên Chiểu, Đà Nẵng
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                0935 342 321
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-pen me-2 text-primary"></i>
+                                Customer
+                            </div>
+                        </td>
+                        <td>
+                            <span class="status-badge status-pending">Pending</span>
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <button class="action-btn" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <div class="text-secondary">
+                Showing 1 to 10 of 50 entries
+            </div>
+            <nav>
+                <ul class="pagination mb-0">
+                    <li class="page-item">
+                        <a class="page-link" href="#">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item active">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+  </div>
+</div>

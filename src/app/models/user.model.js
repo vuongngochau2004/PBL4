@@ -29,6 +29,11 @@ const user = sequelize.define('user', {
     type: DataTypes.STRING,
     allowNull: true
   },
+  image: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    defaultValue: 'default.jpg'
+  },
   status: {
     type: DataTypes.STRING,
     allowNull: false,

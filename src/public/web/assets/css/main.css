@@ -1,5 +1,5 @@
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 16px;
   line-height: 1.5;
   color: #212529;
@@ -277,4 +277,57 @@ a.currency-icon > span {
   width: 300px; /* Chiều rộng  */
   max-height: 200px; /* Chiều cao tối đa */
   overflow-y: auto;  /* Hiển thị thanh cuộn dọc */
+}
+
+.max-rate {
+  color: green !important;
+}
+
+.min-rate {
+  color: red !important;
+}
+
+.main-title {
+  color: rgb(25, 57, 183);
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+.section-title {
+  color: rgb(25, 57, 183);
+  font-size: 20px;
+  margin: 15px 0;
+}
+.rate-line {
+  margin: 10px 0;
+  line-height: 1.5;
+}
+.rate-lowest {
+  color: #ff0000;
+}
+.rate-highest {
+  color: #008000;
+}
+.small-text {
+  font-size: 14px;
+}
+.source {
+  text-align: right;
+  color: #666;
+  margin-top: 20px;
+}
+.bank-icon-1 {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+a {
+  text-decoration: none;
+}
+
+.user-name {
+  font-weight: 600;
+  color: white;
+  margin-right: 1rem;
 }

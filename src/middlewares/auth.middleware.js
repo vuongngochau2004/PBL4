@@ -8,7 +8,6 @@ module.exports = async (req, res, next) => {
     // Lấy token từ cookie
     const token = req.cookies.token;
 
-    console.log(token);
     if (!token) {
         return next(new ErrorResponse(401, 'Unauthorized'));
     }
@@ -18,13 +17,15 @@ module.exports = async (req, res, next) => {
         const user = await User.findByPk(decode.id);
 
         if (!user) {
-        return next(new ErrorResponse(401, 'Unauthorized'));
+            res.locals.user = null; // Không tìm thấy user, gán user là null
+            return next();
         }
 
         req.user = user;
         res.locals.user = user; // Lưu thông tin người dùng vào res.locals
         next();
     } catch (error) {
-        return next(new ErrorResponse(401, 'Unauthorized'));
+        res.locals.user = null; // Lỗi xác thực, gán user là null
+        return next();
     }
 }

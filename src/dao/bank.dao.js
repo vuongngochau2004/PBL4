@@ -44,7 +44,6 @@ const  crawlBank = async (exchangeData)=> {
               await existingBank.update({
                 last_updated: formattedDate,
               });
-              console.log('Updated successfully!');
             } else {
               const [bank, created] = await Bank.findOrCreate({
                 where: { name: nameBank },

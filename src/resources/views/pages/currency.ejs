@@ -2,21 +2,21 @@
   <div class="card-body">
     <h5 class="card-title">Tỷ giá <%= currency.code %> tại các ngân hàng </h5>
     <div class="container mt-4">
-      <h2 class="text-primary mb-4">Chuyển đổi Đô la Mỹ (USD) và Việt Nam Đồng (VND)</h2>
+      <h2 class="text-primary mb-4">Chuyển đổi <%= currency.name %> (<%= currency.code %>) và Việt Nam Đồng (VND)</h2>
       
       <p class="mb-4">
-          Tỷ giá Đô la Mỹ hôm nay là <strong>1 USD = 25.308 VND</strong>. 
-          Tỷ giá trung bình USD được tính từ dữ liệu của <strong>40 ngân hàng (*)</strong> có hỗ trợ giao dịch Đô la Mỹ.
+          Tỷ giá <%= currency.name %> hôm nay là <strong>1 <%= currency.code %> = <%= money.vndAmount %> VND</strong>. 
+          Tỷ giá trung bình <%= currency.code %> được tính từ dữ liệu của <strong>11 ngân hàng (*)</strong> có hỗ trợ giao dịch <%= currency.name %>.
       </p>
 
       <div class="row justify-content-center align-items-center g-3">
           <div class="col-12 col-md-4">
-              <div class="input-group">
-                  <span class="input-group-text">
-                      <img src="/api/placeholder/20/15" alt="US Flag" class="me-2">
-                      USD
-                  </span>
-                  <input type="number" class="form-control" value="1">
+              <div class="input-group currency-icon">
+                <span class="input-group-text ">
+                  <span class="me-2 cur-icon ci-<%= curCode %>"></span>
+                  <%= currency.code %>
+                </span>
+                <input id="convertInput" type="number" name="curAmount" class="form-control" value="1">
               </div>
           </div>
 
@@ -28,27 +28,26 @@
           </div>
 
           <div class="col-12 col-md-4">
-              <div class="input-group">
-                  <span class="input-group-text">
-                      <img src="/api/placeholder/20/15" alt="Vietnam Flag" class="me-2">
-                      VND
-                  </span>
-                  <input type="number" class="form-control" value="25308">
+              <div class="input-group currency-icon">
+                <span class="input-group-text ">
+                  <span class="cur-icon ci-vnd"></span>
+                  VND
+                </span>
+                  <input id="resultConvertInput" type="text" class="form-control" value="<%= money.averageRate %>" readonly>
               </div>
           </div>
       </div>
 
       <div class="text-center mt-4">
           <h3 class="mb-3">
-              <span class="text-primary">1 USD</span> = 
-              <span class="text-danger">25.308 VND</span>
+              <span class="text-primary curAmount">1 <%= currency.code %></span> = 
+              <span class="text-danger vndAmount"><%= money.vndAmount %> VND</span>
           </h3>
-          <p class="text-muted">
-              (Tỷ giá Trung bình: 1 USD = 25.308 VND, 22:55:12 29/12/2024)
+          <p class="text-muted curvndAmount">
+              (Tỷ giá Trung bình: 1 <%= currency.code %> = <%= money.averageRate %> VND)
           </p>
       </div>
     </div>
-
     <table class="table table-hover table-bordered">
       <thead class="table">
         <tr>
@@ -66,14 +65,255 @@
             <span class="bak-icon bi-<%= item.bank.name_lowercase %>"></span>
             <span><%= item.bank.name %></span>
           </a></th>
-          <td><%= item.buy_cash_price %></td>
-          <td><%= item.buy_transfer_price %></td>
-          <td><%= item.sell_cash_price %></td>
-          <td><%= item.sell_transfer_price %></td>
+
+          <td class="<%= (item.buy_cash_price == maxRates.maxBuyCashPrice) ? 'max-rate' : '' %> <%= (item.buy_cash_price == minRates.minBuyCashPrice) ? 'min-rate' : '' %>"><%= item.buy_cash_price %></td>
+          <td class="<%= (item.buy_transfer_price == maxRates.maxBuyTransferPrice) ? 'max-rate' : '' %> <%= (item.buy_transfer_price == minRates.minBuyTransferPrice) ? 'min-rate' : '' %>"><%= item.buy_transfer_price %></td>
+          <td class="<%= (item.sell_cash_price == maxRates.maxSellCashPrice) ? 'max-rate' : '' %> <%= (item.sell_cash_price == minRates.minSellCashPrice) ? 'min-rate' : '' %>"><%= item.sell_cash_price %></td>
+          <td class="<%= (item.sell_transfer_price == maxRates.maxSellTransferPrice) ? 'max-rate' : '' %> <%= (item.sell_transfer_price == minRates.minSellTransferPrice) ? 'min-rate' : '' %>"><%= item.sell_transfer_price %></td>
         </tr>
         <% }); %>
       </tbody>
     </table>
+    <div class="container py-3">
+      <h1 class="main-title">Tóm tắt tình hình tỷ giá <%= currency.name %> (<%= currency.code %>) hôm nay (<%= currentDate %>)</h1>
+      
+      <div class="small-text">Dựa vào bảng so sánh tỷ giá <%= currency.code %> tại 11 ngân hàng ở trên, WebGia.com xin tóm tắt tỷ giá theo 2 nhóm chính như sau:</div>
+    
+      <h2 class="section-title">Ngân hàng mua <%= currency.name %> (<%= currency.code %>)</h2>
+      <% if (banksMinRates.buyCashPriceBanks.length == 1) { %>
+        <div class="rate-line ">
+          + Ngân hàng <img class="bank-icon bak-icon bi-<%= banksMinRates.buyCashPriceBanks[0].bank.name.toLowerCase() %>" >
+              <a href="/exchange-rate/<%= banksMinRates.buyCashPriceBanks[0].bank.id %>"><%= banksMinRates.buyCashPriceBanks[0].bank.name %></a> 
+            đang mua tiền mặt <%= currency.name %> với giá <span class="rate-lowest">thấp nhất</span> là: 
+              <% if(minRates.minBuyCashPrice === '10.000.000') { %>
+                <span class="rate-lowest">không có</span>
+              <% } else { %>
+                1 <%= currency.code %> = <span class="rate-lowest"><%= minRates.minBuyCashPrice %></span> VND
+              <% } %>
+       </div>
+      <% } else { %>
+          <div class="rate-line">
+            + Ngân hàng 
+            <% if(minRates.minBuyCashPrice !== '10.000.000') { %>
+              <% banksMinRates.buyCashPriceBanks.forEach(function(item) { %>
+                <img class="bank-icon bak-icon bi-<%= item.bank.name.toLowerCase() %>" >
+                <a href="/exchange-rate/<%= item.bank.id %>"><%= item.bank.name %></a> 
+                <% }); %>
+            <% } %>
+              đang mua tiền mặt <%= currency.name %> với giá <span class="rate-lowest">thấp nhất</span> là: 
+              <% if(minRates.minBuyCashPrice === '10.000.000') { %>
+                <span class="rate-lowest">không có</span>
+              <% } else { %>
+                1 <%= currency.code %> = <span class="rate-lowest"><%= minRates.minBuyCashPrice %></span> VND
+              <% } %>
+         </div>
+      <% } %>
+
+      <% if (banksMinRates.buyTransferPriceBanks.length == 1) { %>
+      <div class="rate-line">
+          + Ngân hàng <img class="bank-icon bak-icon bi-<%= banksMinRates.buyTransferPriceBanks[0].bank.name.toLowerCase() %>" >
+              <a href="/exchange-rate/<%= banksMinRates.buyTransferPriceBanks[0].bank.id %>"><%= banksMinRates.buyTransferPriceBanks[0].bank.name %></a> 
+              đang mua chuyển khoản <%= currency.name %> với giá <span class="rate-lowest">thấp nhất</span> là: 
+              <% if (minRates.minBuyTransferPrice === '10.000.000') { %>
+                <span class="rate-lowest">không có</span>
+              <% } else { %>
+                1 <%= currency.code %> = <span class="rate-lowest"><%= minRates.minBuyTransferPrice %></span> VND
+              <% } %>
+      </div>
+      <% } else { %>
+          <div class="rate-line">
+            + Ngân hàng 
+            <% if (minRates.minBuyTransferPrice !== '10.000.000') { %>
+              <% banksMinRates.buyTransferPriceBanks.forEach(function(item) { %>
+                <img class="bank-icon bak-icon bi-<%= item.bank.name.toLowerCase() %>" >
+                <a href="/exchange-rate/<%= item.bank.id %>"><%= item.bank.name %></a> 
+              <% }); %>
+            <% } %>
+            đang mua chuyển khoản <%= currency.name %> với giá <span class="rate-lowest">thấp nhất</span> là: 
+            <% if (minRates.minBuyTransferPrice === '10.000.000') { %>
+              <span class="rate-lowest">không có</span>
+            <% } else { %>
+              1 <%= currency.code %> = <span class="rate-lowest"><%= minRates.minBuyTransferPrice %></span> VND
+            <% } %>
+          </div>
+      <% } %>
+
+      <% if (banksMaxRates.buyCashPriceBanks.length == 1) { %>
+      <div class="rate-line">
+          + Ngân hàng <img class="bank-icon bak-icon bi-<%= banksMaxRates.buyCashPriceBanks[0].bank.name.toLowerCase() %>" >
+              <a href="/exchange-rate/<%= banksMaxRates.buyCashPriceBanks[0].bank.id %>"><%= banksMaxRates.buyCashPriceBanks[0].bank.name %></a> 
+              đang mua tiền mặt <%= currency.name %> với giá <span class="rate-highest">cao nhất</span> là: 
+              <% if (maxRates.maxBuyCashPrice === '0') { %>
+                <span class="rate-highest">không có</span>
+              <% } else { %>
+                1 <%= currency.code %> = <span class="rate-highest"><%= maxRates.maxBuyCashPrice %></span> VND
+              <% } %>
+      </div>
+      <% } else { %>
+          <div class="rate-line">
+            + Ngân hàng
+            <% if (maxRates.maxBuyCashPrice !== '0') { %>
+              <% banksMaxRates.buyCashPriceBanks.forEach(function(item) { %>
+                <img class="bank-icon bak-icon bi-<%= item.bank.name.toLowerCase() %>" >
+                <a href="/exchange-rate/<%= item.bank.id %>"><%= item.bank.name %> </a> 
+              <% }); %>
+            <% } %>
+            đang mua tiền mặt <%= currency.name %> với giá <span class="rate-highest">cao nhất</span> là: 
+            <% if (maxRates.maxBuyCashPrice === '0') { %>
+              <span class="rate-highest">không có</span>
+            <% } else { %>
+              1 <%= currency.code %> = <span class="rate-highest"><%= maxRates.maxBuyCashPrice %></span> VND
+            <% } %>
+
+         </div>
+      <% } %>
+
+      <% if (banksMaxRates.buyTransferPriceBanks.length == 1) { %>
+      <div class="rate-line">
+          + Ngân hàng <img class="bank-icon bak-icon bi-<%= banksMaxRates.buyTransferPriceBanks[0].bank.name.toLowerCase() %>" >
+              <a href="/exchange-rate/<%= banksMaxRates.buyTransferPriceBanks[0].bank.id %>"><%= banksMaxRates.buyTransferPriceBanks[0].bank.name %></a> 
+              đang mua chuyển khoản <%= currency.name %> với giá <span class="rate-highest">cao nhất</span> là: 1 <%= currency.code %> = <span class="rate-highest"><%= maxRates.maxBuyTransferPrice %></span> VND
+      </div>
+      <% } else { %>
+          <div class="rate-line">
+            + Ngân hàng
+            <% if (maxRates.maxBuyTransferPrice !== '0') { %>
+              <% banksMaxRates.buyTransferPriceBanks.forEach(function(item) { %>
+                <img class="bank-icon bak-icon bi-<%= item.bank.name.toLowerCase() %>" >
+                <a href="/exchange-rate/<%= item.bank.id %>"><%= item.bank.name %> </a> 
+              <% }); %>
+            <% } %>
+            đang mua chuyển khoản <%= currency.name %> với giá <span class="rate-highest">cao nhất</span> là: 
+            <% if (maxRates.maxBuyTransferPrice === '0') { %>
+              <span class="rate-highest">không có</span>
+            <% } else { %>
+              1 <%= currency.code %> = <span class="rate-highest"><%= maxRates.maxBuyTransferPrice %></span> VND
+            <% } %>
+         </div>
+      <% } %>
+    
+      <h2 class="section-title">Ngân hàng bán <%= currency.name %> (<%= currency.code %>)</h2>
+      
+      <% if (banksMinRates.sellCashPriceBanks.length == 1) { %>
+      <div class="rate-line">
+          + Ngân hàng <img class="bank-icon bak-icon bi-<%= banksMinRates.sellCashPriceBanks[0].bank.name.toLowerCase() %>" >
+              <a href="/exchange-rate/<%= banksMinRates.sellCashPriceBanks[0].bank.id %>"><%= banksMinRates.sellCashPriceBanks[0].bank.name %></a> 
+              đang bán tiền mặt <%= currency.name %> với giá <span class="rate-lowest">thấp nhất</span> là: 
+              <% if (minRates.minSellCashPrice === '10.000.000') { %>
+                <span class="rate-lowest">không có</span>
+              <% } else { %>
+                1 <%= currency.code %> = <span class="rate-lowest"><%= minRates.minSellCashPrice %></span> VND
+              <% } %>
+      </div>
+      <% } else { %>
+          <div class="rate-line">
+            + Ngân hàng
+            <% if (minRates.minSellCashPrice !== '10.000.000') { %>
+              <% banksMinRates.sellCashPriceBanks.forEach(function(item) { %>
+                <img class="bank-icon bak-icon bi-<%= item.bank.name.toLowerCase() %>" >
+                <a href="/exchange-rate/<%= item.bank.id %>"><%= item.bank.name %> </a> 
+              <% }); %>
+            <% } %>
+            đang bán tiền mặt <%= currency.name %> với giá <span class="rate-lowest">thấp nhất</span> là: 
+            <% if (minRates.minSellCashPrice === '10.000.000') { %>
+              <span class="rate-lowest">không có</span>
+            <% } else { %>
+              1 <%= currency.code %> = <span class="rate-lowest"><%= minRates.minSellCashPrice %></span> VND
+            <% } %>
+         </div>
+      <% } %>
+      
+      <% if (banksMinRates.sellTransferPriceBanks.length == 1) { %>
+        <div class="rate-line">
+          + Ngân hàng <img class="bank-icon bak-icon bi-<%= banksMinRates.sellTransferPriceBanks[0].bank.name.toLowerCase() %>" >
+              <a href="/exchange-rate/<%= banksMinRates.sellTransferPriceBanks[0].bank.id %>"><%= banksMinRates.sellTransferPriceBanks[0].bank.name %></a> 
+              đang bán chuyển khoản <%= currency.name %> với giá <span class="rate-lowest">thấp nhất</span> là: 
+              <% if (minRates.minSellTransferPrice === '10.000.000') { %>
+                <span class="rate-lowest">không có</span>
+              <% } else { %>
+                1 <%= currency.code %> = <span class="rate-lowest"><%= minRates.minSellTransferPrice %></span> VND
+              <% } %>
+        </div>
+      <% } else { %>
+          <div class="rate-line">
+            + Ngân hàng
+            <% if (minRates.minSellTransferPrice !== '10.000.000') { %>
+              <% banksMinRates.sellTransferPriceBanks.forEach(function(item) { %>
+                <img class="bank-icon bak-icon bi-<%= item.bank.name.toLowerCase() %>" >
+                <a href="/exchange-rate/<%= item.bank.id %>"><%= item.bank.name %> </a> 
+              <% }); %>
+            <% } %>
+            đang bán chuyển khoản <%= currency.name %> với giá <span class="rate-lowest">thấp nhất</span> là: 
+            <% if (minRates.minSellTransferPrice === '10.000.000') { %>
+              <span class="rate-lowest">không có</span>
+            <% } else { %>
+              1 <%= currency.code %> = <span class="rate-lowest"><%= minRates.minSellTransferPrice %></span> VND
+            <% } %>
+         </div>
+      <% } %>
+
+      <% if (banksMaxRates.sellCashPriceBanks.length == 1) { %>
+      <div class="rate-line">
+          + Ngân hàng <img class="bank-icon bak-icon bi-<%= banksMaxRates.sellCashPriceBanks[0].bank.name.toLowerCase() %>" >
+              <a href="/exchange-rate/<%= banksMaxRates.sellCashPriceBanks[0].bank.id %>"><%= banksMaxRates.sellCashPriceBanks[0].bank.name %></a> 
+              đang bán tiền mặt <%= currency.name %> với giá <span class="rate-highest">cao nhất</span> là: 
+              <% if (maxRates.maxSellCashPrice === '0') { %>
+                <span class="rate-highest">không có</span>
+              <% } else { %>
+                1 <%= currency.code %> = <span class="rate-highest"><%= maxRates.maxSellCashPrice %></span> VND
+              <% } %>
+      </div>
+      <% } else { %>
+          <div class="rate-line">
+            + Ngân hàng
+            <% if (maxRates.maxSellCashPrice !== '0') { %>
+              <% banksMaxRates.sellCashPriceBanks.forEach(function(item) { %>
+                <img class="bank-icon bak-icon bi-<%= item.bank.name.toLowerCase() %>" >
+                <a href="/exchange-rate/<%= item.bank.id %>"> <%= item.bank.name %> </a> 
+              <% }); %>
+            <% } %>
+            đang bán tiền mặt <%= currency.name %> với giá <span class="rate-highest">cao nhất</span> là: 
+            <% if (maxRates.maxSellCashPrice === '0') { %>
+              <span class="rate-highest">không có</span>
+            <% } else { %>
+              1 <%= currency.code %> = <span class="rate-highest"><%= maxRates.maxSellCashPrice %></span> VND
+            <% } %>
+         </div>
+      <% } %>
+      
+      <% if (banksMaxRates.sellTransferPriceBanks.length == 1) { %>
+      <div class="rate-line">
+          + Ngân hàng <img class="bank-icon bak-icon bi-<%= banksMaxRates.sellTransferPriceBanks[0].bank.name.toLowerCase() %>" >
+            <a href="/exchange-rate/<%= banksMaxRates.sellTransferPriceBanks[0].bank.id %>"><%= banksMaxRates.sellTransferPriceBanks[0].bank.name %></a> 
+            đang bán chuyển khoản <%= currency.name %> với giá <span class="rate-highest">cao nhất</span> là: 
+            <% if (maxRates.maxSellTransferPrice === '0') { %>
+              <span class="rate-highest">không có</span>
+            <% } else { %> 
+              1 <%= currency.code %> = <span class="rate-highest"><%= maxRates.maxSellTransferPrice %></span> VND
+            <% } %>
+      </div>
+      <% } else { %>
+          <div class="rate-line">
+            + Ngân hàng
+            <% if (maxRates.maxSellTransferPrice !== '0') { %>
+              <% banksMaxRates.sellTransferPriceBanks.forEach(function(item) { %>
+                <img class="bank-icon bak-icon bi-<%= item.bank.name.toLowerCase() %>" >
+                <a href="/exchange-rate/<%= item.bank.id %>"><%= item.bank.name %> </a> 
+              <% }); %>
+            <% } %>
+            đang bán chuyển khoản <%= currency.name %> với giá <span class="rate-highest">cao nhất</span> là: 
+            <% if (maxRates.maxSellTransferPrice === '0') { %>
+              <span class="rate-highest">không có</span>
+            <% } else { %>
+              1 <%= currency.code %> = <span class="rate-highest"><%= maxRates.maxSellTransferPrice %></span> VND
+            <% } %>
+         </div>
+      <% } %>
+  
+      <div class="source">
+          Nguồn: Tổng hợp bởi <a href="/exchange-rate">WebGia.com</a>
+      </div>
+    </div>
   </div>
 </div>
 <div class="card pg-3 p-3" style="height: 450px">
@@ -105,3 +345,35 @@
       <small><a href="/exchange-rate/37" class="text-primary text-decoration-none">Xem bảng tỷ giá hối đoái vietcombank.com </a></small>
   </div>
 </div>
+<script>
+  const convertInput = document.getElementById('convertInput');
+  const resultConvertInput = document.getElementById('resultConvertInput');
+  const changeConvert = document.getElementById('changeConvert');
+  const curAmount = document.querySelector('.curAmount');
+  const vndAmount = document.querySelector('.vndAmount');
+  const curvndAmount = document.querySelector('.curvndAmount');
+  let timeout;
+  convertInput.addEventListener('input', () => {
+    const curAmountValue = convertInput.value;
+    console.log(curAmountValue);
+    if (curAmountValue.length > 0) {
+      clearTimeout(timeout);
+      const currentUrl = window.location.href;
+      console.log('Current URL:', currentUrl);
+      timeout = setTimeout(() => {
+        fetch(`${currentUrl}/convert?a=${curAmountValue}`)
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            curAmount.textContent = `${curAmountValue} ${data.curCode}`;
+            vndAmount.textContent = `${data.money.vndAmount} VND`;
+            curvndAmount.textContent = `(Tỷ giá Trung bình: 1 ${data.curCode} = ${data.money.averageRate} VND)`;
+            resultConvertInput.value = data.money.vndAmount;
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }, 500); // Chờ 500ms sau khi người dùng dừng gõ để gửi yêu cầu
+    }
+  });
+</script>

@@ -103,21 +103,18 @@ const scheduleScraping = async (site, crawlModel) => {
   });
 };
 
-const scheduleScrapingExchangeRate = async (site, crawlModel) => {
-  return new Promise((resolve) => {
-    // Lập lịch crawler chạy mỗi 10 phút
-    cron.schedule('*/50 * * * *', async () => {
-      console.log(`Đang chạy crawler cho ${site.name}...`);
-      try {
-        await scrapeSite(site, crawlModel);
-        resolve(); // Đánh dấu hoàn thành sau khi scrape xong
-      } catch (error) {
-        console.error(`Lỗi khi chạy crawler cho ${site.name}:`, error);
-        resolve(); // Vẫn đánh dấu hoàn thành để không treo Promise
-      }
-    });
+const scheduleScrapingExchangeRate = (site, crawlModel) => {
+  // Lập lịch crawler chạy mỗi 50 phút
+  cron.schedule('*/50 * * * *', async () => {
+    console.log(`Đang chạy crawler cho ${site.name}...`);
+    try {
+      await scrapeSite(site, crawlModel);
+    } catch (error) {
+      console.error(`Lỗi khi chạy crawler cho ${site.name}:`, error);
+    }
   });
 };
+
 
 module.exports = {
   scrapeSite,

@@ -9,8 +9,8 @@ const {
   getLogout, 
   getForgotPassword, 
   postForgotPassword 
-} = require('./../../app/controllers/admin/auth.controller');
-const asyncMiddleware = require('./../../middlewares/async.middleware');
+} = require('../../app/controllers/auth.controller');
+const asyncMiddleware = require('../../middlewares/async.middleware');
 
 router.route('/login')
   .get(asyncMiddleware(getLogin))

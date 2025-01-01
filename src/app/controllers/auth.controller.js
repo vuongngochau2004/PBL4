@@ -1,7 +1,8 @@
 require('dotenv').config();
-const { User } = require('./../../models/index.model');
-const jwt = require('jsonwebtoken');
+const { User } = require('../models/index.model');
 const bcryptjs = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 module.exports = {
   getLogin: (req, res) => {
       res.render("auth/admin/login", {
@@ -36,7 +37,7 @@ module.exports = {
       const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '1d' });
       
       // Gửi token về phía client
-      res.status(200).json({ token });
+      res.status(200).json({ token, role: user.role });
   },
   getRegister: (req, res) => {
       res.render("auth/admin/register", {
@@ -46,7 +47,6 @@ module.exports = {
   },
   postRegister: async (req, res) => {
       const {fullname, email, password} = req.body;
-      console.log(fullname, email, password);
       const user = await User.findOne({ where: { email: email } });
       
       if (user) {
@@ -62,24 +62,18 @@ module.exports = {
               fullname: fullname,
               email: email,
               password: password,
-              role: "admin",
+              role: "customer",
           }
       );
       res.redirect("login");
   },
-  getForgotPassword: (req, res) => {
-      res.render("auth/admin/forgot-password", {
-      pageTitle: "Admin Forgot Password",
-      layout: false,
-      });
-  },
-  postForgotPassword: (req, res) => {
-      res.send("Forgot Password");
-  },
   getLogout: (req, res) => {
-      res.render("auth/admin/login", {
-          pageTitle: "Admin Logout",
-          layout: false,
-      });
+    // Xóa token khỏi cookie
+    res.clearCookie("token");
+
+    res.render("auth/admin/login", {
+        pageTitle: "Admin Logout",
+        layout: false,
+    });
   },   
 }
