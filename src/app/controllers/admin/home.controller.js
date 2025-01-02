@@ -13,8 +13,11 @@ module.exports = {
   },
   postProfile: async (req, res) => {
     const body = req.body;
-    console.log('req.file:', req.file);
-    body.image = req.file.filename;
+    if(req.file){
+      body.image = req.file.filename;
+    }else {
+      body.image = req.user.image;
+    }
     const user = await editUser(req.user.id, body);
     res.redirect("/admin/profile");
   },

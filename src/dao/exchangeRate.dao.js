@@ -1,6 +1,6 @@
 const { Bank, Currency, ExchangeRate } = require('../app/models/index.model');
 const { Op, Sequelize } = require('sequelize');
-const { formatMoney, formatMoneyOther } = require('../helpers/utils');
+const { formatMoney, formatMoneyOther } = require('../helpers/utils.helper');
 
 const crawlVietcombankData = async (exchangeData) => {
   for(const row of exchangeData){

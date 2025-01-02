@@ -1,6 +1,6 @@
-const { scrapeSite, scheduleScraping } = require('../helpers/crawl');
+const { scrapeSite, scheduleScraping } = require('../helpers/crawl.helper');
 const { crawlBank, getAllBankData, getBankById, getBanksFromExchangeRates } = require('../dao/bank.dao');
-const { formatDateTime } = require('../helpers/utils');
+const { formatDateTime } = require('../helpers/utils.helper');
 const fetchBankData = async (sitesConfig) => {
   const scrapingPromises = sitesConfig.map(site => scrapeSite(site, crawlBank));
   return await Promise.all(scrapingPromises);

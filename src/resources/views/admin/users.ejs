@@ -1,3 +1,22 @@
+<!-- Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">Xác nhận</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn khoá người dùng này?</p>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" onclick="handleConfirm()">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
 <div class="container-fluid px-4">
     <div class="card">
       <div class="table-card">
@@ -9,12 +28,21 @@
               </div>
               <div class="d-flex gap-3">
                   <div class="position-relative">
-                      <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
-                      <input type="text" class="form-control search-input ps-5" placeholder="Tìm kiếm người dùng...">
+                       <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
+                      <input type="text" id="searchUsers" class="form-control search-input ps-5" placeholder="Tìm kiếm người dùng...">
                   </div>
               </div>
           </div>
-  
+          <script>
+            const searchUsersInput = document.getElementById('searchUsers');
+            // lắng nghe sự kiện enter 
+            searchUsersInput.addEventListener('keydown', (e) => {
+                if(e.key === 'Enter') {
+                    const searchValue = e.target.value;
+                    window.location.href = `/admin/users/search?q=${searchValue}`;
+                }
+            });
+          </script>
           <!-- Bảng -->
           <div class="table-responsive">
               <table class="table align-middle">
@@ -70,9 +98,9 @@
                           </td>
                           <td>
                               <div class="d-flex gap-2">
-                                  <a href="#" class="action-btn" title="Xóa">
+                                  <button class="action-btn" onclick="showModal(<%= user.id %>)" title="Xóa" <%= user.status === 'locked' ? 'disabled' : '' %> >
                                       <i class="fas fa-lock"></i>
-                                  </a>
+                                  </button>
                               </div>
                           </td>
                       </tr>
@@ -80,37 +108,43 @@
                   </tbody>
               </table>
           </div>
-  
-          <!-- Phân Trang -->
-          <div class="d-flex justify-content-between align-items-center mt-4">
-              <div class="text-secondary">
-                  Hiển thị từ 1 đến 10 trong tổng số 50 mục
-              </div>
-              <nav>
-                  <ul class="pagination mb-0">
-                      <li class="page-item">
-                          <a class="page-link" href="#">
-                              <i class="fas fa-chevron-left"></i>
-                          </a>
-                      </li>
-                      <li class="page-item active">
-                          <a class="page-link" href="#">1</a>
-                      </li>
-                      <li class="page-item">
-                          <a class="page-link" href="#">2</a>
-                      </li>
-                      <li class="page-item">
-                          <a class="page-link" href="#">3</a>
-                      </li>
-                      <li class="page-item">
-                          <a class="page-link" href="#">
-                              <i class="fas fa-chevron-right"></i>
-                          </a>
-                      </li>
-                  </ul>
-              </nav>
-          </div>
+          <script>
+            let confirmModal;
+            
+            // Initialize modal when document is ready
+            document.addEventListener('DOMContentLoaded', function() {
+                confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+            });
+            
+            let user_id = null;
+            // Function to show modal
+            function showModal(id) {
+                user_id = id;
+                if (confirmModal) {
+                    confirmModal.show();
+                }
+            }
+            
+            // Function to handle confirmation
+            function handleConfirm() {
+                // Add your confirmation logic here
+                console.log(user_id || 'No user id found');
+                fetch('/admin/users/lock', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: user_id,
+                    })
+                })
+                confirmModal.hide();
+                window.location.reload();
+            }
+            
+        </script>
       </div>
     </div>
   </div>
+  
   

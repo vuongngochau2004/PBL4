@@ -41,33 +41,42 @@ module.exports = {
   },
   getRegister: (req, res) => {
       res.render("auth/admin/register", {
-      pageTitle: "Admin Register",
-      layout: false,
+        pageTitle: "Admin Register",
+        layout: false,
       });
   },
   postRegister: async (req, res) => {
-      const {fullname, email, password} = req.body;
-      const user = await User.findOne({ where: { email: email } });
-      
-      if (user) {
-          // render lại trang register với thông báo email đã tồn tại
-          return res.render("auth/admin/register", { 
-              pageTitle: "Admin Register",
-              layout: false,
-              errMessage: "Email đã tồn tại",
-          });
-      }
-      const newUser = await User.create(
-          {
-              fullname: fullname,
-              email: email,
-              password: password,
-              role: "customer",
-              image: "default.jpg",
-          }
-      );
-      res.redirect("login");
-  },
+    const { fullname, email, password } = req.body;
+
+    try {
+        // Kiểm tra email đã tồn tại chưa
+        const user = await User.findOne({ where: { email } });
+        if (user) {
+            return res.status(400).json({ errMessage: "Email đã tồn tại" });
+        }
+
+        // Tạo người dùng mới
+        const newUser = await User.create({
+            fullname,
+            email,
+            password,
+            role: "customer",
+            image: "default.jpg",
+        });
+
+        // Kiểm tra nếu không tạo được người dùng
+        if (!newUser) {
+            return res.status(500).json({ errMessage: "Đăng ký không thành công, vui lòng thử lại." });
+        }
+
+        // Trả về phản hồi thành công
+        return res.status(201).json({ success: "Đăng ký thành công" });
+    } catch (error) {
+        console.error("Error during user registration:", error);
+        return res.status(500).json({ errMessage: "Đã xảy ra lỗi, vui lòng thử lại." });
+    }
+},
+
   getLogout: (req, res) => {
     // Xóa token khỏi cookie
     res.clearCookie("token");

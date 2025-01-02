@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('./../../configs/database'); // Adjust the path as needed
+const { sequelize } = require('../../configs/database'); // Adjust the path as needed
 const bcryptjs = require('bcryptjs');
 
 const user = sequelize.define('user', {

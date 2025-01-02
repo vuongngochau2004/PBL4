@@ -39,7 +39,7 @@
       <% if (user) { %>
         <div class="user-info">
           <div class="profile-user">
-            <img src="http://localhost:3000/img/default.jpg" width="20" height="20" class="rounded-circle">
+            <img src="http://localhost:3000/img/<%= user.image %>" width="20" height="20" class="rounded-circle">
             <a href="/profile" class="user-name"><%= user.fullname %></a>
           </div>
           <% if (user.role === 'admin') { %>

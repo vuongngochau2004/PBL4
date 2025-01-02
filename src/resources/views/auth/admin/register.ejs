@@ -218,6 +218,22 @@
           box-shadow: 0 8px 16px -4px rgba(99,102,241,0.5);
           color: white;
       }
+
+        #errorMessage {
+          color: red;
+          font-size: small;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+
+      .error-message {
+          color: red;
+          font-size: 0.875rem;
+          margin-top: 0.25rem;
+          display: none;
+      }
     </style>
 </head>
 <body>
@@ -229,36 +245,129 @@
         <div class="signup-card">
             <div class="signup-header">
                 <img src="/web/assets/images/logo.png" class="rounded-circle" alt="Logo">
-                <h1>Create an account</h1>
-                <p>Join us today and start your journey</p>
+                <h1>Tạo tài khoản</h1>
+                <p>Tham gia cùng chúng tôi và bắt đầu hành trình của bạn</p>
             </div>
 
-            <form id="signupForm" action="/auth/register" method="POST">
+            <form id="signupForm" method="POST" action="/auth/register" onsubmit="return validateRegisterForm()">
                 <div class="form-floating">
-                  <input type="fullname" class="form-control" name="fullname" id="fullname" placeholder="Enter your fullname">
-                  <label for="fullname">Fullname</label>
+                  <input type="fullname" class="form-control" name="fullname" id="fullname" placeholder="Nhập họ và tên của bạn">
+                  <label for="fullname">Họ và tên</label>
+                  <div id="fullnameError" class="error-message">Họ và tên phải có ít nhất 3 ký tự.</div>
                 </div>
 
                 <div class="form-floating">
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email">
-                    <label for="email">Email address</label>
+                    <input type="text" class="form-control" id="email" name="email" placeholder="Nhập email của bạn">
+                    <label for="email">Địa chỉ email</label>
+                    <div id="emailError" class="error-message">Vui lòng nhập địa chỉ email hợp lệ.</div>
                 </div>
 
                 <div class="form-floating">
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Choose password">
-                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Chọn mật khẩu">
+                    <label for="password">Mật khẩu</label>
+                    <div id="passwordError" class="error-message">Mật khẩu phải có ít nhất 6 ký tự.</div>
+                </div>
+
+                <div class="message">
+                    <p id="errorMessage" style="display: none;"></p>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-signup">
-                    Create account
+                    Tạo tài khoản
                 </button>
 
                 <div class="signup-footer">
-                    Already have an account? <a href="/auth/login">Sign in</a>
+                    Đã có tài khoản? <a href="/auth/login">Đăng nhập</a>
                 </div>
             </form>
         </div>
     </div>
+
+    <script>
+        
+        
+        
+    </script>
+
+    <script>
+        function validateRegisterForm() {
+            const fullname = document.getElementById('fullname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+    
+            let isValid = true;
+
+            // Validate fullname
+            const fullnameError = document.getElementById('fullnameError');
+            if (fullname.length < 3) {
+                fullnameError.style.display = 'block';
+                isValid = false;
+            } else {
+                fullnameError.style.display = 'none';
+            }
+
+            // Validate email
+            const emailError = document.getElementById('emailError');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                emailError.style.display = 'block';
+                isValid = false;
+            } else {
+                emailError.style.display = 'none';
+            }
+
+            // Kiểm tra mật khẩu
+            const passwordError = document.getElementById('passwordError');
+            if (password.length < 6) {
+                passwordError.style.display = 'block';
+                isValid = false;
+            } else {
+                passwordError.style.display = 'none';
+            }
+
+            return isValid;
+        }
+        
+        document.getElementById('registerForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const fullname = document.getElementById('fullname').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/auth/register', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ fullname, email, password }),
+                });
+
+                // Kiểm tra dữ liệu trả về
+                const data = await response.json();
+                console.log('Response từ server:', data);
+
+                if (response.ok) {
+                    alert('Đăng ký thành công!');
+                    window.location.href = '/auth/login';
+                } else {
+                    // Xử lý nếu server không trả về errMessage
+                    const errorMessage = data.errMessage || 'Đã xảy ra lỗi, vui lòng thử lại.';
+                    const errorMessageElement = document.getElementById('errorMessage');
+                    if (errorMessageElement) {
+                        errorMessageElement.innerText = errorMessage;
+                        errorMessageElement.style.display = 'block';
+                    } else {
+                        console.error('Phần tử errorMessage không tồn tại.');
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+
+    </script>    
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 </body>

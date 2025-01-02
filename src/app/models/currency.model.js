@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('./../../configs/database'); // Giả sử bạn đã thiết lập Sequelize
+const { sequelize } = require('../../configs/database'); // Giả sử bạn đã thiết lập Sequelize
 
 const currency = sequelize.define('currency', {
   id: {

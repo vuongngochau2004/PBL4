@@ -1,7 +1,8 @@
-const { searchData } = require('./../../../services/search.service');
-const { findBanksFromExchangeRates } = require('./../../../services/bank.service');
-const { findAllCurrencyLimit3 } = require('./../../../services/currency.service');
-const { findExchangeRateVietcombank, dateUpdateVietcombank } = require('./../../../services/exchangeRate.service');
+const { searchData } = require('../../../services/search.service');
+const { findBanksFromExchangeRates } = require('../../../services/bank.service');
+const { findAllCurrencyLimit3 } = require('../../../services/currency.service');
+const { findExchangeRateVietcombank, dateUpdateVietcombank } = require('../../../services/exchangeRate.service');
+const { editUser } = require('../../../services/user.service');
 
 module.exports = {
   getData: async (req, res) => {
@@ -22,10 +23,24 @@ module.exports = {
     const results = await searchData(query);
     res.json(results);
   }, 
+
   getProfile: async (req, res) => {
-    console.log('ok');
+    const banks = await findBanksFromExchangeRates();
+    const currencies = await findAllCurrencyLimit3();
     res.render("pages/profile", {
-      pageTitle: "Trang cá nhân",
+      banks,
+      currencies,
+      pageTitle: "Trang cá nhân"
     });
   },
+  postProfile: async (req, res) => {
+    const body = req.body;
+    if(req.file){
+      body.image = req.file.filename;
+    }else {
+      body.image = req.user.image;
+    }
+    const user = await editUser(req.user.id, body);
+    res.redirect("/profile");
+  }
 }

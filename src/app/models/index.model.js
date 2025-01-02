@@ -1,4 +1,4 @@
-const { sequelize } = require('./../../configs/database'); // Giả sử bạn đã thiết lập Sequelize
+const { sequelize } = require('../../configs/database'); // Giả sử bạn đã thiết lập Sequelize
 const Bank = require('./bank.model');
 const Currency = require('./currency.model');
 const ExchangeRate = require('./exchangeRate.model');

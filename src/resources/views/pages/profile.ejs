@@ -1,5 +1,5 @@
-<div class="container-fluid px-4">
-  <div class="card">
+
+   <div class="card card-profile">
       <div class="table-card">
           <!-- Tiêu đề -->
           <div class="table-header d-flex justify-content-between align-items-center">
@@ -10,7 +10,7 @@
           </div>
 
           <!-- Form thông tin cá nhân -->
-          <form action="/admin/profile" method="POST" enctype="multipart/form-data">
+          <form action="/profile" method="POST" enctype="multipart/form-data">
               <div class="row g-3 mt-4">
                   <div class="col-md-4 text-center">
                       <img src="/img/<%= user.image %>" alt="Avatar" class="rounded-circle" style="width: 150px; height: 150px; border: 1px solid #ccc;">
@@ -60,11 +60,10 @@
           </form>
       </div>
   </div>
-</div>
 
 <script>
   function previewImage(event) {
       const image = document.querySelector('img[alt="Avatar"]');
       image.src = URL.createObjectURL(event.target.files[0]);
   }
-</script>
+</script> 

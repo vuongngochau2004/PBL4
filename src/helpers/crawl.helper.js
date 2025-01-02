@@ -13,46 +13,6 @@ const scrapeSite = async (site, crawlModel) => {
   try {
     await page.goto(site.url, { waitUntil: 'networkidle0', timeout: 60000 });
     
-    // if (site.rowSelector === '.list-ty-gia .dl-grid-md-5') {
-    //   const xemThemSelector = '.container .sec-tg-2 a';
-    //   let previousContentLength = 0;
-
-    //   // Lặp lại việc click \"Xem thêm\" cho đến khi nội dung không thay đổi
-    //   let hasMore = true;
-    //   while (hasMore) {
-    //     const xemThemElement = await page.$(xemThemSelector);
-    //     if (xemThemElement) {
-    //       const linkText = await page.evaluate(el => el.innerText.trim(), xemThemElement);
-    //       if (linkText === 'Xem thêm') {
-    //         await page.waitForSelector(xemThemSelector);
-    //         await page.click(xemThemSelector);
-    //         console.log('Đã click vào thẻ \"Xem thêm\".');
-
-    //         // Chờ nội dung tải thêm
-    //         await new Promise(resolve => setTimeout(resolve, 1000));
-
-    //         // Kiểm tra nếu nội dung mới xuất hiện
-    //         const currentContentLength = await page.evaluate(rowSelector => {
-    //           return document.querySelectorAll(rowSelector).length;
-    //         }, site.rowSelector);
-
-    //         if (currentContentLength === previousContentLength) {
-    //           console.log('Không có nội dung mới, dừng lại.');
-    //           hasMore = false;
-    //         } else {
-    //           previousContentLength = currentContentLength;
-    //         }
-    //       } else {
-    //         console.log('Nút \"Xem thêm\" không có nội dung phù hợp.');
-    //         hasMore = false;
-    //       }
-    //     } else {
-    //       console.log('Không tìm thấy nút \"Xem thêm\".');
-    //       hasMore = false;
-    //     }
-    //   }
-    // }
-    
     // Generalized data extraction logic
     let exchangeData ;
     if(!site.columnSelectorHead){

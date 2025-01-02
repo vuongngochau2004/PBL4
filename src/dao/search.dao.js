@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const { Bank, Currency } = require('./../app/models/index.model');
+const { Bank, Currency, User } = require('../app/models/index.model');
 
 const search = async (query) => {
   if (!query) {
@@ -63,7 +63,46 @@ const search = async (query) => {
   return results;
 }
 
+const searchUsers = async (query) => {
+
+  if (!query) {
+    return [];
+  }
+
+  const newQuery = query.toLowerCase().trim();
+
+  // Tìm kiếm trong bảng User
+  const userResults = await User.findAll({
+    where: {
+      [Sequelize.Op.or]: [
+        {
+          fullname: {
+            [Sequelize.Op.like]: `%${newQuery}%`
+          }
+        },
+        {
+          email: {
+            [Sequelize.Op.like]: `%${newQuery}%`
+          }
+        },
+        {
+          phone_number: {
+            [Sequelize.Op.like]: `%${newQuery}%`
+          }
+        },
+        {
+          address: {
+            [Sequelize.Op.like]: `%${newQuery}%`
+          }
+        }
+      ]
+    }
+  });
+
+  return userResults;
+}
 
 module.exports = {
   search,
+  searchUsers,
 };

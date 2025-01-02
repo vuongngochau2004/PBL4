@@ -35,6 +35,13 @@ const removeUser = async (id) => {
   return await deleteUser(id);
 }
 
+const lockUser = async (id) => {
+  const userUpdated = await updateUser(id, {
+    status: 'locked'
+  });
+  return userUpdated;
+}
+
 module.exports = {
   findAllUsers,
   findUserById,
@@ -42,4 +49,5 @@ module.exports = {
   editUser,
   removeUser,
   findAllCustomers,
+  lockUser,
 }

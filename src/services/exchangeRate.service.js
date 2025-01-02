@@ -1,4 +1,4 @@
-const { scrapeSite, scheduleScraping, scheduleScrapingExchangeRate } = require('../helpers/crawl');
+const { scrapeSite, scheduleScraping, scheduleScrapingExchangeRate } = require('../helpers/crawl.helper');
 const { 
   crawlTPBankData,
   crawlHSBCData,
@@ -18,7 +18,7 @@ const {
   getExchangeRateCurrencyByBankIdAndDate,
   getExchangeRateCurrencyByBankIdAndDateAndCurrencyCode,
 } = require('../dao/exchangeRate.dao');
-const { formatDateTime, formatMoneyOther, formatExchangeRate, formatDate, parseDateToISO, convertIsoToDateString } = require('../helpers/utils');
+const { formatDateTime, formatMoneyOther, formatExchangeRate, formatDate, parseDateToISO, convertIsoToDateString } = require('../helpers/utils.helper');
 
 const fetchExchangeRateData = async (sitesConfig) => {
   for (const site of sitesConfig) {
